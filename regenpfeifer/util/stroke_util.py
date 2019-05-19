@@ -26,23 +26,27 @@ def split(stroke):
 
 
 def remove_markup(stroke):
-    stripped_stroke = remove_hyphens(stroke)
+    stripped_stroke = remove_excess_hyphens(stroke)
     stripped_stroke = stripped_stroke.replace("[e|", "")
     stripped_stroke = stripped_stroke.replace("[", "")
     stripped_stroke = stripped_stroke.replace("]", "")
     return stripped_stroke
 
 
-def remove_hyphens(stroke):
-    if "[e|" in stroke:
-        return stroke.replace("-", "")
+def remove_excess_hyphens(stroke):
+    # if there's a vowel or *, no hyphens are needed at all
+    if "[e|" in stroke or "[*]" in stroke:
+        return stroke.replace("-", "")
+    # otherwise the first hyphen is left but all others are removed
     stroke_parts = split(stroke)
-    after_vowel = False
+    first_hyphen_seen = False
     stripped_stroke_parts = []
     for stroke_part in stroke_parts:
-        if stroke_part.startswith("[e|"):
-            after_vowel = True
-        if after_vowel and stroke_part.startswith("[-"):
+        if stroke_part.startswith("[-"):
+            if not first_hyphen_seen:
+                first_hyphen_seen = True
+                stripped_stroke_parts.append(stroke_part)
+                continue
             stripped_stroke_parts.append(stroke_part.replace("[-", "["))
         else:
             stripped_stroke_parts.append(stroke_part)

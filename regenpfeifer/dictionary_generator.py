@@ -40,7 +40,7 @@ if __name__ == '__main__':
     forms = OrderedDict()
     for word in dictionary_generator.words:
         i += 1
-        word_type = dictionary_generator.words[word].split(" ")[0]
+        word_type = dictionary_generator.words[word].split(" ")[0].replace("\n", "")
         chords = chord_generator.generate(word, word_type)
         # TODO: remove word emphasizer to increase performance
         print(word + " - " + word_type + ": " + word_emphasizer.emphasize(word, word_type))

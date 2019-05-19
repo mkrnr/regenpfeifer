@@ -13,8 +13,8 @@ class TestChordsGenerator(unittest.TestCase):
         self.word_pattern_matcher = ChordGenerator()
 
     def test_easy_words(self):
-        # self.assertEqual(self.word_pattern_matcher.generate("sein", "inf"), ["SAEUPB"])
-        self.assertEqual(self.word_pattern_matcher.generate("müssten", "1ppl?"), ["PHOUSTN"])
+        self.assertEqual(self.word_pattern_matcher.generate("sein", "inf"), ["SAEUPB"])
+        # self.assertEqual(self.word_pattern_matcher.generate("müssten", "1ppl?"), ["PHOUSTN"])
 
 
 if __name__ == '__main__':

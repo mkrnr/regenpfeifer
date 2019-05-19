@@ -111,7 +111,8 @@ class WordEmphasizer:
 
         for emp_prefix in self.emp_prefixes:
             if word.startswith(emp_prefix):
-                return matched_never_emp_prefix + matched_usually_emp_prefix + self.emp_vowel(emp_prefix)
+                word = re.sub("^" + emp_prefix, "", word)
+                return matched_never_emp_prefix + matched_usually_emp_prefix + self.emp_vowel(emp_prefix) + word
 
         if matched_usually_emp_prefix:
             return matched_never_emp_prefix + self.emp_vowel(matched_usually_emp_prefix) + word
