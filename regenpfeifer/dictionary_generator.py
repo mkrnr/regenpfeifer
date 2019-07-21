@@ -4,7 +4,7 @@ from collections import OrderedDict
 import json
 import sys
 
-from regenpfeifer.chord_generator import ChordGenerator
+from regenpfeifer.stroke_generator import StrokeGenerator
 from regenpfeifer.word_emphasizer import WordEmphasizer
 
 
@@ -35,7 +35,7 @@ if __name__ == '__main__':
 
     dictionary_generator.read_word_list(word_list_file_path, limit=1000)
 
-    chord_generator = ChordGenerator()
+    chord_generator = StrokeGenerator()
     word_emphasizer = WordEmphasizer()
     forms = OrderedDict()
     dictionary = {}

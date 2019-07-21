@@ -6,7 +6,7 @@ Created on May 11, 2019
 from regenpfeifer.util import stroke_util
 
 
-class ChordValidator(object):
+class StrokeValidator(object):
     '''
     classdocs
     '''

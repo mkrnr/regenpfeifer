@@ -3,13 +3,13 @@ Created on May 11, 2019
 
 @author: mkoerner
 '''
-from regenpfeifer.chord_validator import ChordValidator
+from regenpfeifer.stroke_validator import StrokeValidator
 from regenpfeifer.util import stroke_util
 from regenpfeifer.word_emphasizer import WordEmphasizer
 from regenpfeifer.word_pattern_matcher import WordPatternMatcher
 
 
-class ChordGenerator(object):
+class StrokeGenerator(object):
     '''
     Provides methods for generating chords from German words. 
     '''
@@ -20,7 +20,7 @@ class ChordGenerator(object):
         '''
         self.word_emphasizer = WordEmphasizer()
         self.word_pattern_matcher = WordPatternMatcher()
-        self.chord_validator = ChordValidator()
+        self.chord_validator = StrokeValidator()
         
     def generate(self, word, word_type):
         word = word.lower()

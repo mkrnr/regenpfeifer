@@ -4,13 +4,13 @@ Created on Apr 22, 2019
 @author: mkoerner
 '''
 import unittest
-from regenpfeifer.chord_validator import ChordValidator
+from regenpfeifer.stroke_validator import StrokeValidator
 
 
-class TestChordValidator(unittest.TestCase):
+class TestStrokeValidator(unittest.TestCase):
 
     def setUp(self):
-        self.chord_validator = ChordValidator()
+        self.chord_validator = StrokeValidator()
 
     def test_simple_words(self):
         self.assertEqual(self.chord_validator.validate("[TP][e|OU][-R][-N]"), True)

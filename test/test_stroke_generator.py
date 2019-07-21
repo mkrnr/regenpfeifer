@@ -4,13 +4,13 @@ Created on Apr 22, 2019
 @author: mkoerner
 '''
 import unittest
-from regenpfeifer.chord_generator import ChordGenerator
+from regenpfeifer.stroke_generator import StrokeGenerator
 
 
-class TestChordsGenerator(unittest.TestCase):
+class TestStrokeGenerator(unittest.TestCase):
 
     def setUp(self):
-        self.word_pattern_matcher = ChordGenerator()
+        self.word_pattern_matcher = StrokeGenerator()
 
     def test_easy_words(self):
         self.assertEqual(self.word_pattern_matcher.generate("sein", "inf"), ["SAEUPB"])

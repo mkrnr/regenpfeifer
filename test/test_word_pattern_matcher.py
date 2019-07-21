@@ -7,7 +7,7 @@ import unittest
 from regenpfeifer.word_pattern_matcher import WordPatternMatcher
 
 
-class TestPatternMatcher(unittest.TestCase):
+class TestWordPatternMatcher(unittest.TestCase):
 
     def setUp(self):
         self.stroke_generator = WordPatternMatcher()
