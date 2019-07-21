@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import codecs
 from collections import OrderedDict
+import json
 import sys
 
 from regenpfeifer.chord_generator import ChordGenerator
@@ -13,7 +14,7 @@ class DictionaryGenerator:
     def __init__(self):
         self.words = OrderedDict()
 
-    def read_word_list(self, derewo_file_path):
+    def read_word_list(self, derewo_file_path, limit=0):
         i = 0
         with codecs.open(derewo_file_path, "r", "utf-8") as f:
             for line in f:
@@ -23,7 +24,7 @@ class DictionaryGenerator:
 
                 # TODO remove
                 i += 1
-                if i % 1000 == 0:
+                if limit > 0 and i % limit == 0:
                     return
 
 
@@ -32,34 +33,22 @@ if __name__ == '__main__':
     dictionary_file_path = sys.argv[2]
     dictionary_generator = DictionaryGenerator()
 
-    dictionary_generator.read_word_list(word_list_file_path)
-    i = 0
+    dictionary_generator.read_word_list(word_list_file_path, limit=1000)
 
     chord_generator = ChordGenerator()
     word_emphasizer = WordEmphasizer()
     forms = OrderedDict()
+    dictionary = {}
     for word in dictionary_generator.words:
-        i += 1
         word_type = dictionary_generator.words[word].split(" ")[0].replace("\n", "")
         chords = chord_generator.generate(word, word_type)
         # TODO: remove word emphasizer to increase performance
         print(word + " - " + word_type + ": " + word_emphasizer.emphasize(word, word_type))
         print(chords)
         print("")
+        for chord in chords:
+            if chord not in dictionary:
+                dictionary[chord] = word
 
-        # for translation in value:
-        #    print("\t"+translation)
-
-        # print(dictionary_generator.get_forms(word))
-        # print(h_de.syllables(word))
-
-#     with codecs.open(dictionary_file_path, "w", "utf-8") as word_list_file:
-#         for word, value in forms.items():
-#             i+=1
-#             word_list_file.write(word+"\t"+value+"\n")
-# 
-#             # this language is the default value; it can thus be omitted h.pairs('hyphenation') [[u'hyphen', u'ation'], [u'hy', u'phenation']] h.inserted('hyphenation') u'hy=phen=ation' h.wrap('hyphenation', 7) [u'hyphen-', u'ation']
-#             #if i>1000:
-#             #    break
-#     print(len(forms))
-    
+    with open(dictionary_file_path, 'w', encoding='utf8') as fp:
+        json.dump(dictionary, fp, indent=0, ensure_ascii=False)

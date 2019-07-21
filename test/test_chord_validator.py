@@ -40,6 +40,9 @@ class TestChordValidator(unittest.TestCase):
         self.assertEqual(self.chord_validator.validate("[R][D]"), False)
         self.assertEqual(self.chord_validator.validate("[e|O][A]"), False)
 
+    def test_strokes_with_asterisk(self):
+        self.assertEqual(self.chord_validator.validate("[TKPW][e|A][-PB][-S]*"), True)
+
 
 if __name__ == '__main__':
     unittest.main()

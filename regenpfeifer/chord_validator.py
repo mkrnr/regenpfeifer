@@ -22,6 +22,9 @@ class ChordValidator(object):
     
     def validate(self, chord):
 
+       # ignore asterisks
+        chord = chord.replace("*", "")
+
         strokes = chord.split("/")
         for stroke in strokes:
             
@@ -52,6 +55,7 @@ class ChordValidator(object):
                 return False
         
         return True 
+
     def validate_order(self, stroke_parts):
 
         # first check 

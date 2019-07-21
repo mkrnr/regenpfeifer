@@ -25,12 +25,16 @@ def split(stroke):
     return stroke_parts 
 
 
-def remove_markup(stroke):
-    stripped_stroke = remove_excess_hyphens(stroke)
-    stripped_stroke = stripped_stroke.replace("[e|", "")
-    stripped_stroke = stripped_stroke.replace("[", "")
-    stripped_stroke = stripped_stroke.replace("]", "")
-    return stripped_stroke
+def remove_markup(strokes):
+    splitted_strokes = strokes.split("/")
+    stripped_strokes = []
+    for stroke in splitted_strokes:
+        stripped_stroke = remove_excess_hyphens(stroke)
+        stripped_stroke = stripped_stroke.replace("[e|", "")
+        stripped_stroke = stripped_stroke.replace("[", "")
+        stripped_stroke = stripped_stroke.replace("]", "")
+        stripped_strokes.append(stripped_stroke)
+    return "/".join(stripped_strokes)
 
 
 def remove_excess_hyphens(stroke):
@@ -51,4 +55,62 @@ def remove_excess_hyphens(stroke):
         else:
             stripped_stroke_parts.append(stroke_part)
     return join(stripped_stroke_parts)
+
+
+vowels = "AOEU"
+
+
+def contains_vowel(stripped_stroke):
+    for vowel in vowels:
+        if vowel in stripped_stroke:
+            return True
+    return False
+
+
+before_asterisk = "STKPWHRAO"
+
+
+def reposition_asterisks(stripped_strokes):
+    splitted_stripped_strokes = stripped_strokes.split("/")
+    fixed_strokes = []
+    for stripped_stroke in splitted_stripped_strokes:
+        if "*" in stripped_stroke:
+            if "-" in stripped_stroke:
+                fixed_strokes.append(stripped_stroke.replace("-", "*"))
+                break
+
+            stripped_stroke = stripped_stroke.replace("*", "")
+            # vowels_in_stroke=contains_vowel(stripped_stroke)
+
+            index_for_asterisk = None
+            current_before_asterisk = before_asterisk
+            for i in range(len(stripped_stroke)):
+                key = stripped_stroke[i]
+            #    if vowels_in_stroke:
+                if key in current_before_asterisk:
+                    current_before_asterisk = get_all_after_letter(current_before_asterisk, key)
+                    continue
+                index_for_asterisk = i
+                break
+            fixed_strokes.append(insert_asterisk(stripped_stroke, index_for_asterisk))
+        else:
+            fixed_strokes.append(stripped_stroke)
+
+    return "/".join(fixed_strokes)
+
+
+def get_all_after_letter(letters, letter):
+    filtered_letters = ""
+    letter_reached = False
+    for current_letter in letters:
+        if current_letter is letter:
+            letter_reached = True
+            continue
+        if letter_reached:
+            filtered_letters = filtered_letters + current_letter
+    return filtered_letters
+
+
+def insert_asterisk(stripped_stroke, index):
+    return stripped_stroke[:index] + '*' + stripped_stroke[index:]
     

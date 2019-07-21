@@ -14,7 +14,10 @@ class TestChordsGenerator(unittest.TestCase):
 
     def test_easy_words(self):
         self.assertEqual(self.word_pattern_matcher.generate("sein", "inf"), ["SAEUPB"])
-        # self.assertEqual(self.word_pattern_matcher.generate("müssten", "1ppl?"), ["PHOUSTN"])
+        self.assertEqual(self.word_pattern_matcher.generate("müssten", "1ppl?"), ["PHOUFTN"])
+        self.assertEqual(self.word_pattern_matcher.generate("hattest", "2sgp"), ["HAT/-FT"])
+        self.assertEqual(self.word_pattern_matcher.generate("zweit", "nn"), ["SWA*EUT"])
+        self.assertEqual(self.word_pattern_matcher.generate("ganz", "nn"), ["TKPWA*PBS"])
 
 
 if __name__ == '__main__':

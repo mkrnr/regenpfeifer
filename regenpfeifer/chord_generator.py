@@ -4,7 +4,7 @@ Created on May 11, 2019
 @author: mkoerner
 '''
 from regenpfeifer.chord_validator import ChordValidator
-from regenpfeifer.util import chord_util
+from regenpfeifer.util import stroke_util
 from regenpfeifer.word_emphasizer import WordEmphasizer
 from regenpfeifer.word_pattern_matcher import WordPatternMatcher
 
@@ -46,6 +46,8 @@ class ChordGenerator(object):
 
         stripped_chords = []
         for valid_chord in valid_chords:
-            stripped_chords.append(chord_util.remove_markup(valid_chord))
+            formatted_chord = stroke_util.remove_markup(valid_chord)
+            formatted_chord = stroke_util.reposition_asterisks(formatted_chord)
+            stripped_chords.append(formatted_chord)
         return stripped_chords
 
