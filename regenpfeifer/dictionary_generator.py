@@ -30,9 +30,10 @@ class DictionaryGenerator:
 if __name__ == '__main__':
     word_list_file_path = sys.argv[1]
     dictionary_file_path = sys.argv[2]
+    limit = sys.argv[3]
     dictionary_generator = DictionaryGenerator()
 
-    dictionary_generator.read_word_list(word_list_file_path, limit=1000)
+    dictionary_generator.read_word_list(word_list_file_path, limit=limit)
 
     stroke_generator = StrokeGenerator()
     word_emphasizer = WordEmphasizer()
