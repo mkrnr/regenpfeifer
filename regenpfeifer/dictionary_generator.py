@@ -8,7 +8,6 @@ from regenpfeifer.stroke_generator import StrokeGenerator
 from regenpfeifer.word_emphasizer import WordEmphasizer
 
 
-# from hyphen import Hyphenator
 class DictionaryGenerator:
     
     def __init__(self):
@@ -35,20 +34,20 @@ if __name__ == '__main__':
 
     dictionary_generator.read_word_list(word_list_file_path, limit=1000)
 
-    chord_generator = StrokeGenerator()
+    stroke_generator = StrokeGenerator()
     word_emphasizer = WordEmphasizer()
     forms = OrderedDict()
     dictionary = {}
     for word in dictionary_generator.words:
         word_type = dictionary_generator.words[word].split(" ")[0].replace("\n", "")
-        chords = chord_generator.generate(word, word_type)
+        strokes_list = stroke_generator.generate(word, word_type)
         # TODO: remove word emphasizer to increase performance
         print(word + " - " + word_type + ": " + word_emphasizer.emphasize(word, word_type))
-        print(chords)
+        print(strokes_list)
         print("")
-        for chord in chords:
-            if chord not in dictionary:
-                dictionary[chord] = word
+        for strokes in strokes_list:
+            if strokes not in dictionary:
+                dictionary[strokes] = word
 
     with open(dictionary_file_path, 'w', encoding='utf8') as fp:
         json.dump(dictionary, fp, indent=0, ensure_ascii=False)

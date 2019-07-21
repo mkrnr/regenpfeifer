@@ -20,13 +20,13 @@ class StrokeValidator(object):
     vowel_keys = ['A', 'O', '*', 'E', 'U']
     right_consonant_keys = ['-', 'F', 'R', 'P', 'B', 'L', 'G', 'T', 'S', 'D', 'N']
     
-    def validate(self, chord):
+    def validate(self, strokes):
 
-       # ignore asterisks
-        chord = chord.replace("*", "")
+        # ignore asterisks
+        strokes = strokes.replace("*", "")
 
-        strokes = chord.split("/")
-        for stroke in strokes:
+        splitted_strokes = strokes.split("/")
+        for stroke in splitted_strokes:
             
             stroke_parts = stroke_util.split(stroke)
 

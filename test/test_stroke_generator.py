@@ -10,14 +10,14 @@ from regenpfeifer.stroke_generator import StrokeGenerator
 class TestStrokeGenerator(unittest.TestCase):
 
     def setUp(self):
-        self.word_pattern_matcher = StrokeGenerator()
+        self.stroke_generator = StrokeGenerator()
 
     def test_easy_words(self):
-        self.assertEqual(self.word_pattern_matcher.generate("sein", "inf"), ["SAEUPB"])
-        self.assertEqual(self.word_pattern_matcher.generate("müssten", "1ppl?"), ["PHOUFTN"])
-        self.assertEqual(self.word_pattern_matcher.generate("hattest", "2sgp"), ["HAT/-FT"])
-        self.assertEqual(self.word_pattern_matcher.generate("zweit", "nn"), ["SWA*EUT"])
-        self.assertEqual(self.word_pattern_matcher.generate("ganz", "nn"), ["TKPWA*PBS"])
+        self.assertEqual(self.stroke_generator.generate("sein", "inf"), ["SAEUPB"])
+        self.assertEqual(self.stroke_generator.generate("müssten", "1ppl?"), ["PHOUFTN"])
+        self.assertEqual(self.stroke_generator.generate("hattest", "2sgp"), ["HAT/-FT"])
+        self.assertEqual(self.stroke_generator.generate("zweit", "nn"), ["SWA*EUT"])
+        self.assertEqual(self.stroke_generator.generate("ganz", "nn"), ["TKPWA*PBS"])
 
 
 if __name__ == '__main__':
