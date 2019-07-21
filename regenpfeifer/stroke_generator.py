@@ -24,21 +24,11 @@ class StrokeGenerator(object):
         
     def generate(self, word, word_type):
         word = word.lower()
-        strokes_list = set()
 
         emphazised_word = self.word_emphasizer.emphasize(word, word_type)
-        strokes_list.add(emphazised_word)
 
-        while True:
-            len_before = len(strokes_list)
-            strokes_to_add_list = []
-            for strokes in strokes_list:
-                strokes_to_add_list.append(self.word_pattern_matcher.match(strokes))
-            for stroke_to_add in strokes_to_add_list:
-                strokes_list.add(stroke_to_add)
-            if len(strokes_list) == len_before:
-                break
-        
+        strokes_list = self.word_pattern_matcher.match(emphazised_word)
+
         valid_strokes_list = []
         for strokes in strokes_list:
             if self.stroke_validator.validate(strokes):

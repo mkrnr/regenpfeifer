@@ -13,11 +13,12 @@ class TestStrokeGenerator(unittest.TestCase):
         self.stroke_generator = StrokeGenerator()
 
     def test_easy_words(self):
-        self.assertEqual(self.stroke_generator.generate("sein", "inf"), ["SAEUPB"])
-        self.assertEqual(self.stroke_generator.generate("müssten", "1ppl?"), ["PHOUFTN"])
-        self.assertEqual(self.stroke_generator.generate("hattest", "2sgp"), ["HAT/-FT"])
-        self.assertEqual(self.stroke_generator.generate("zweit", "nn"), ["SWA*EUT"])
-        self.assertEqual(self.stroke_generator.generate("ganz", "nn"), ["TKPWA*PBS"])
+        self.assertEqual(self.stroke_generator.generate('sein', 'inf'), ['SAEUPB'])
+        self.assertEqual(self.stroke_generator.generate('müssten', '1ppl?'), ['PHOUFT/EPB', 'PHOUFTN'])
+        self.assertEqual(self.stroke_generator.generate('hattest', '2sgp'), ['HAT/-FT', 'HAT/EFT'])
+        self.assertEqual(self.stroke_generator.generate('zweit', 'nn'), ['SWA*EUT'])
+        self.assertEqual(self.stroke_generator.generate('ganz', 'nn'), ['TKPWA*PBS'])
+        self.assertEqual(self.stroke_generator.generate('rennen', 'inf'), ['REPB/EPB', 'REPBN'])
 
 
 if __name__ == '__main__':
