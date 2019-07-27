@@ -25,8 +25,8 @@ class StrokeValidator(object):
         # ignore asterisks
         strokes = strokes.replace("*", "")
 
-        splitted_strokes = strokes.split("/")
-        for stroke in splitted_strokes:
+        strokes = strokes.split("/")
+        for stroke in strokes:
             
             stroke_parts = stroke_util.split(stroke)
 

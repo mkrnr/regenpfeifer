@@ -26,9 +26,9 @@ def split(stroke):
 
 
 def remove_markup(strokes):
-    splitted_strokes = strokes.split("/")
+    strokes = strokes.split("/")
     stripped_strokes = []
-    for stroke in splitted_strokes:
+    for stroke in strokes:
         stripped_stroke = remove_excess_hyphens(stroke)
         stripped_stroke = stripped_stroke.replace("[e|", "")
         stripped_stroke = stripped_stroke.replace("[", "")

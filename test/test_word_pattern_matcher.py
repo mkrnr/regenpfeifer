@@ -45,6 +45,12 @@ class TestWordPatternMatcher(unittest.TestCase):
         match_dict["b[e|e]enden"] = ['[PW][e|E]/[-PBD][-N]', '[PW][e|E][-N][-D][-N]', '[PW][e|E][-N][-D][-PB]', '[PW][e|E][-N][-D]e[-PB]', '[PW][e|E][-PBD][-N]', '[PW][e|E][-PBD][-PB]', '[PW][e|E][-PBD]e[-PB]', '[PW][e|E][-PB][-D][-N]', '[PW][e|E][-PB][-D][-PB]', '[PW][e|E][-PB][-D]e[-PB]', '[PW][e|E]e[-PB][-D][-N]', '[PW][e|E]e[-PB][-D][-PB]', '[PW][e|E]e[-PB][-D]e[-PB]']
 
         self.run_match_tests(match_dict)
+        
+#     def test_long_matches(self):
+#         match_dict = {}
+#         match_dict["s[e|e]lbstverständliches"] = ['[PW][e|E]/[-PBD][-N]', '[PW][e|E][-N][-D][-N]', '[PW][e|E][-N][-D][-PB]', '[PW][e|E][-N][-D]e[-PB]', '[PW][e|E][-PBD][-N]', '[PW][e|E][-PBD][-PB]', '[PW][e|E][-PBD]e[-PB]', '[PW][e|E][-PB][-D][-N]', '[PW][e|E][-PB][-D][-PB]', '[PW][e|E][-PB][-D]e[-PB]', '[PW][e|E]e[-PB][-D][-N]', '[PW][e|E]e[-PB][-D][-PB]', '[PW][e|E]e[-PB][-D]e[-PB]']
+
+        self.run_match_tests(match_dict)
 
     def run_match_tests(self, match_dict):
         for emphasized_word in match_dict:
