@@ -13,10 +13,13 @@ class TestWordEmphasizer(unittest.TestCase):
         self.word_emphasizer = WordEmphasizer()
 
     def test_simple_words(self):
-        self.assertEqual(self.word_emphasizer.emphasize("wegen", "inf"), "w[e|e]gen")
-        self.assertEqual(self.word_emphasizer.emphasize("beim", "in"), "b[e|ei]m")
-        self.assertEqual(self.word_emphasizer.emphasize("erst", "rb"), "[e|e]rst")
-        self.assertEqual(self.word_emphasizer.emphasize("bend", "other"), "b[e|e]nd")
+        self.run_test("wegen", "inf", "w[e|e]gen")
+        self.run_test("beim", "in", "b[e|ei]m")
+        self.run_test("erst", "rb", "[e|e]rst")
+        self.run_test("bend", "other", "b[e|e]nd")
+
+    def run_test(self, word, word_type, result):
+        self.assertEqual(self.word_emphasizer.emphasize(word, word_type), result)
 
 
 if __name__ == '__main__':

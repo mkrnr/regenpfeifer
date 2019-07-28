@@ -13,8 +13,11 @@ class TestStrokeAggregator(unittest.TestCase):
         self.stroke_aggregator = StrokeAggregator()
 
     def test_split_easy_words(self):
-        self.assertEqual(self.stroke_aggregator.aggregate_strokes("Zu/sammen/fassung"), ['Zusammenfassung', 'Zu/sammenfassung', 'Zusammen/fassung', 'Zu/sammen/fassung'])
-        self.assertEqual(self.stroke_aggregator.aggregate_strokes("Zu/sammen"), ['Zusammen', 'Zu/sammen'])
+        self.run_test("Zu/sammen/fassung", ['Zusammenfassung', 'Zu/sammenfassung', 'Zusammen/fassung', 'Zu/sammen/fassung'])
+        self.run_test("Zu/sammen", ['Zusammen', 'Zu/sammen'])
+
+    def run_test(self, word, result):
+        self.assertEqual(self.stroke_aggregator.aggregate_strokes(word), result)
 
 
 if __name__ == '__main__':

@@ -13,29 +13,22 @@ class TestWordPatternMatcher(unittest.TestCase):
         self.word_pattern_matcher = WordPatternMatcher()
 
     def test_easy_words(self):
-        match_dict = {}
-        match_dict['b[e|ei]n'] = ['[PW][e|AEU][-PB]']
-        match_dict['t[e|o]r'] = ['[T][e|O][-R]']
-        match_dict['s[e|i]nd'] = ['[S][e|EU][-PB][-D]']
-        match_dict['st[e|a]rk'] = ['[S][T][e|A][-R][-BG]']
-        match_dict['br[e|i]ngen'] = ['[PW][R][e|EU][-PB][-G][-N]', '[PW][R][e|EU][-PB][-G][-PB]', '[PW][R][e|EU][-PB][-G]e[-PB]']
-        match_dict['f[e|ü]hren'] = ['[TP][e|OU][-R][-N]', '[TP][e|OU][-R][-PB]', '[TP][e|OU][-R]e[-PB]']
-        match_dict['g[e|a]nz'] = ['[TKPW][e|A][-PB][-S]*']
- 
-        self.run_match_tests(match_dict)
+        self.run_test('b[e|ei]n', ['[PW][e|AEU][-PB]'])
+        self.run_test('t[e|o]r', ['[T][e|O][-R]'])
+        self.run_test('s[e|i]nd', ['[S][e|EU][-PB][-D]'])
+        self.run_test('st[e|a]rk', ['[S][T][e|A][-R][-BG]'])
+        self.run_test('br[e|i]ngen', ['[PW][R][e|EU][-PB][-G][-N]', '[PW][R][e|EU][-PB][-G][-PB]', '[PW][R][e|EU][-PB][-G]e[-PB]'])
+        self.run_test('f[e|ü]hren', ['[TP][e|OU][-R][-N]', '[TP][e|OU][-R][-PB]', '[TP][e|OU][-R]e[-PB]'])
+        self.run_test('g[e|a]nz', ['[TKPW][e|A][-PB][-S]*'])
  
     def test_disambiguations(self):
-        match_dict = {}
-        match_dict['s[e|ei]nen'] = ['[S][e|AEU][-PB][-N]', '[S][e|AEU][-PB][-PB]', '[S][e|AEU][-PB]e[-PB]']
-        match_dict['s[e|ei]en'] = ['[S][e|AEU][-N]', '[S][e|AEU][-PB]', '[S][e|AEU]e[-PB]']
-        match_dict['s[e|ei]n'] = ['[S][e|AEU][-PB]']
+        self.run_test('s[e|ei]nen', ['[S][e|AEU][-PB][-N]', '[S][e|AEU][-PB][-PB]', '[S][e|AEU][-PB]e[-PB]'])
+        self.run_test('s[e|ei]en', ['[S][e|AEU][-N]', '[S][e|AEU][-PB]', '[S][e|AEU]e[-PB]'])
+        self.run_test('s[e|ei]n', ['[S][e|AEU][-PB]'])
 
-        self.run_match_tests(match_dict)
-
-    def run_match_tests(self, match_dict):
-        for emphasized_word in match_dict:
-            print(self.word_pattern_matcher.match(emphasized_word))
-            self.assertEqual(self.word_pattern_matcher.match(emphasized_word), match_dict[emphasized_word])
+    def run_test(self, emphasized_word, result):
+        print(self.word_pattern_matcher.match(emphasized_word))
+        self.assertEqual(self.word_pattern_matcher.match(emphasized_word), result)
         
 
 if __name__ == '__main__':
