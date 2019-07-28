@@ -22,6 +22,7 @@ class TestStrokeGenerator(unittest.TestCase):
         self.assertEqual(self.stroke_generator.generate('Eiszeit', 'nn'), ['AEUS/SA*EUT'])
         self.assertEqual(self.stroke_generator.generate('ganz', 'nn'), ['TKPWA*PBS'])
         self.assertEqual(self.stroke_generator.generate('Wiese', 'nn'), ['WAOEUS/E', 'WAOEU/SE'])
+        self.assertEqual(self.stroke_generator.generate('Gehege', 'nn'), ['TKPWE/HEG/E', 'TKPWE/HE/TKPWE'])
         self.assertEqual(self.stroke_generator.generate('rennen', 'inf'), ['REPBN', 'REPB/TPHEPB'])
         self.assertEqual(self.stroke_generator.generate('regelte', '1sgp'), ['RE/TKPWELT/E', 'RE/TKPWEL/TE'])
         self.assertEqual(self.stroke_generator.generate('wandernd', 'part'), ['WAPB/TKERPBD'])

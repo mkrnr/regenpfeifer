@@ -26,7 +26,7 @@ class WordSyllableSplitter(object):
         self.certain_connectors = ['sch', 'ch', 'ck']
         self.left_connectors = ['er', 'an']
         self.left_non_connectors = ['ana']
-        self.possible_connectors = ['ph', 'pf', 'br', 'pl', 'tr', 'st', 'gr', 'sp', 'kl', 'zw', 'spr']
+        self.possible_connectors = ['ph', 'pf', 'br', 'pl', 'tr', 'st', 'gr', 'sp', 'kl', 'zw', 'spr', 'fr']
         self.separators = ['-', '*', ';', '.', '+', '=', ')', '(', '&', '!', '?', '', ':', ' ', '_', '~']
 
     def get_split_positions(self, word):
