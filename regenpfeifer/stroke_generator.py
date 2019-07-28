@@ -30,6 +30,13 @@ class StrokeGenerator(object):
         self.stroke_validator = StrokeValidator()
 
         self.final_patterns = pattern_util.load_pattern_file('final_patterns.json')
+
+        self.validated_matches = {}
+
+    def add_to_valid_matches(self, word, matched_strokes):
+        if word not in self.validated_matches:
+            self.validated_matches[word] = []
+        self.validated_matches[word].append(matched_strokes)
     
     def generate(self, word, word_type):
         word = word.lower()
@@ -45,11 +52,14 @@ class StrokeGenerator(object):
             # TODO: replace parts of word that were already matched
             emphasized_matched_syllables_list = []
             for syllable in aggregated_syllables:
-                if syllable in aggregated_words:
-                    emphasized_syllable = self.word_emphasizer.emphasize(syllable, word_type)
+                if syllable in self.validated_matches:
+                    matched_syllables = self.validated_matches[syllable]
                 else:
-                    emphasized_syllable = self.word_emphasizer.emphasize(syllable, "other")
-                matched_syllables = self.word_pattern_matcher.match(emphasized_syllable)
+                    if syllable in aggregated_words:
+                        emphasized_syllable = self.word_emphasizer.emphasize(syllable, word_type)
+                    else:
+                        emphasized_syllable = self.word_emphasizer.emphasize(syllable, "other")
+                    matched_syllables = self.word_pattern_matcher.match(emphasized_syllable)
 
                 if len(emphasized_matched_syllables_list) == 0:
                     emphasized_matched_syllables_list = matched_syllables
@@ -66,7 +76,6 @@ class StrokeGenerator(object):
                     print(emphasized_matched_syllables)
                     print('/'.join(emphasized_matched_syllables))
                     matched_strokes_list.append('/'.join(emphasized_matched_syllables))
-                # matched_strokes_list.extend(''.join(map(str, emphasized_matched_syllables)))
 
         for i in range(len(matched_strokes_list)):
             for pattern in self.final_patterns:
@@ -75,6 +84,7 @@ class StrokeGenerator(object):
         valid_strokes_list = []
         for matched_strokes in matched_strokes_list:
             if self.stroke_validator.validate(matched_strokes):
+                self.add_to_valid_matches(word, matched_strokes)
                 valid_strokes_list.append(matched_strokes)
  
         stripped_strokes_list = []

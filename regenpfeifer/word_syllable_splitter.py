@@ -21,21 +21,26 @@ class WordSyllableSplitter(object):
         self.split_vowel_pairs = ['io', 'eie']
         self.preventing_vowel_split_right = ['nen']
 
-        self.non_connectors = ['sst']
-        self.certain_connectors = ['sch', 'ch']
-        self.possible_connectors = ['ph', 'ck', 'pf', 'br', 'pl', 'tr', 'st', 'gr', 'sp', 'kl', 'spr']
+        self.splitters = ['sst', 'ier']
+        self.non_connectors = ['chl']
+        self.certain_connectors = ['sch', 'ch', 'ck']
+        self.left_connectors = ['er', 'an']
+        self.left_non_connectors = ['ana']
+        self.possible_connectors = ['ph', 'pf', 'br', 'pl', 'tr', 'st', 'gr', 'sp', 'kl', 'zw', 'spr']
         self.separators = ['-', '*', ';', '.', '+', '=', ')', '(', '&', '!', '?', '', ':', ' ', '_', '~']
 
     def get_split_positions(self, word):
+        word = word.lower()
         split_positions = []
         word_length = len(word)
         if word_length > 2:
             split_allowed = False
             for i in range(1, word_length - 1):
-                z_minus_3 = word[i - 3]
-                z_minus_2 = word[i - 2]
+                z_minus_2 = ""
+                if i > 1:
+                    z_minus_2 = word[i - 2]
                 z_minus_1 = word[i - 1]
-                if not split_allowed and z_minus_1.lower() in self.vowels:
+                if not split_allowed and z_minus_1 in self.vowels:
                     split_allowed = True
                 if split_allowed:
                     z = word[i]
@@ -43,31 +48,39 @@ class WordSyllableSplitter(object):
                     v = z_minus_1 + z
                     
                     v_extended = z_minus_2 + v
-                    if v_extended.lower() in self.certain_connectors or v_extended.lower() in self.possible_connectors or v_extended.lower() in self.non_connectors or v_extended.lower() in self.split_vowel_pairs:
+                    if v_extended in self.certain_connectors or v_extended in self.possible_connectors or v_extended in self.splitters or v_extended in self.split_vowel_pairs or v_extended in self.non_connectors:
                         v = v_extended
                     
-                    if v.lower() in self.split_vowel_pairs:
+                    if v in self.split_vowel_pairs:
                         # get everything after i
                         z_i_plus = word[i + 1:]
                         if z_i_plus not in self.preventing_vowel_split_right:
                             split_positions.append(i)
                             continue
-                    
-                    if z1 in self.vowels and z not in self.vowels and z not in self.separators and z_minus_1.lower() not in self.separators:
-                        if v.lower() in self.non_connectors:
-                            split_positions.append(i)
+
+                    if v in self.certain_connectors:
+                        self.add_split_position(i - len(v) + 1, word, split_positions)
+                        continue
+                    if z1 in self.vowels and z not in self.vowels and z not in self.separators and z_minus_1 not in self.separators:
+                        if v in self.non_connectors:
                             continue
-                        elif v.lower() in self.certain_connectors:
-                            split_positions.append(i - len(v) + 1)
-                            continue
-                        elif v.lower() in self.possible_connectors:
-                            if z_minus_2.lower() not in self.vowels or z_minus_2.lower() in self.vowels and z_minus_3.lower() in self.vowels:
-                                split_positions.append(i - len(v) + 1)
-                                continue
-                        split_positions.append(i)
+                        if v in self.splitters:
+                            self.add_split_position(i, word, split_positions)
+                        elif v + z1 in self.left_non_connectors:
+                            self.add_split_position(i + 2, word, split_positions)
+                        elif v in self.left_connectors :
+                            self.add_split_position(i + 1, word, split_positions)
+                        elif v in self.possible_connectors and z_minus_2 not in self.vowels:
+                            self.add_split_position(i - len(v) + 1, word, split_positions)
+                        else:
+                            self.add_split_position(i, word, split_positions)
                             
         return split_positions
             
+    def add_split_position(self, split_position, word, split_positions):
+        if split_position > 1 and split_position < len(word) - 1:
+            split_positions.append(split_position)
+
     def split(self, word):
         split_positions = self.get_split_positions(word)
         syllables = []

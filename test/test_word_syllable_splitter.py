@@ -36,6 +36,13 @@ class TestWordSyllableSplitter(unittest.TestCase):
         self.assertEqual(self.syllable_splitter.split('seiet'), ['sei', 'et'])
         self.assertEqual(self.syllable_splitter.split('habend'), ['ha', 'bend'])
         self.assertEqual(self.syllable_splitter.split('Wiese'), ['Wie', 'se'])
+        self.assertEqual(self.syllable_splitter.split('erinnern'), ['er', 'in', 'nern'])
+        self.assertEqual(self.syllable_splitter.split('erzwängst'), ['er', 'zwängst'])
+        self.assertEqual(self.syllable_splitter.split('anerkennen'), ['an', 'er', 'ken', 'nen'])
+        self.assertEqual(self.syllable_splitter.split('Ananas'), ['Ana', 'nas'])
+        self.assertEqual(self.syllable_splitter.split('Katze'), ['Kat', 'ze'])
+        self.assertEqual(self.syllable_splitter.split('Abend'), ['Abend'])
+        self.assertEqual(self.syllable_splitter.split('Anschlag'), ['An', 'schlag'])
 
 
 if __name__ == '__main__':
