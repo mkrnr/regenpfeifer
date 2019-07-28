@@ -4,10 +4,11 @@ Created on May 11, 2019
 @author: mkoerner
 '''
 import itertools
+import re
 
 from regenpfeifer.stroke_aggregator import StrokeAggregator
 from regenpfeifer.stroke_validator import StrokeValidator
-from regenpfeifer.util import stroke_util
+from regenpfeifer.util import stroke_util, pattern_util
 from regenpfeifer.word_emphasizer import WordEmphasizer
 from regenpfeifer.word_pattern_matcher import WordPatternMatcher
 from regenpfeifer.word_syllable_splitter import WordSyllableSplitter
@@ -27,6 +28,8 @@ class StrokeGenerator(object):
         self.word_pattern_matcher = WordPatternMatcher()
         self.stroke_aggregator = StrokeAggregator()
         self.stroke_validator = StrokeValidator()
+
+        self.final_patterns = pattern_util.load_pattern_file('final_patterns.json')
     
     def generate(self, word, word_type):
         word = word.lower()
@@ -64,6 +67,10 @@ class StrokeGenerator(object):
                     print('/'.join(emphasized_matched_syllables))
                     matched_strokes_list.append('/'.join(emphasized_matched_syllables))
                 # matched_strokes_list.extend(''.join(map(str, emphasized_matched_syllables)))
+
+        for i in range(len(matched_strokes_list)):
+            for pattern in self.final_patterns:
+                matched_strokes_list[i] = re.sub(pattern, self.final_patterns[pattern], matched_strokes_list[i])
 
         valid_strokes_list = []
         for matched_strokes in matched_strokes_list:

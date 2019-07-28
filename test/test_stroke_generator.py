@@ -18,6 +18,7 @@ class TestStrokeGenerator(unittest.TestCase):
         self.assertEqual(self.stroke_generator.generate('hattest', '2sgp'), ['HAT/TEFT'])
         self.assertEqual(self.stroke_generator.generate('zweit', 'nn'), ['SWA*EUT'])
         self.assertEqual(self.stroke_generator.generate('ganz', 'nn'), ['TKPWA*PBS'])
+        self.assertEqual(self.stroke_generator.generate('Wiese', 'nn'), ['WAOEUS/E', 'WAOEU/SE'])
         self.assertEqual(self.stroke_generator.generate('rennen', 'inf'), ['REPBN', 'REPB/TPHEPB'])
         self.assertEqual(self.stroke_generator.generate('regelte', '1sgp'), ['RE/TKPWELT/E', 'RE/TKPWEL/TE'])
         self.assertEqual(self.stroke_generator.generate('wandernd', 'part'), ['WAPB/TKERPBD'])
@@ -27,6 +28,7 @@ class TestStrokeGenerator(unittest.TestCase):
         self.assertEqual(self.stroke_generator.generate('gleichem', 'attrmind'), ['TKPWHRAEU/KHEPL'])
         self.assertEqual(self.stroke_generator.generate('erst', 'rb'), ['EFRT'])
         self.assertEqual(self.stroke_generator.generate('habend', 'part'), ['HA/PWEPBD'])
+        self.assertEqual(self.stroke_generator.generate('allgemein', 'part'), ['AL/TKPWE/PHAEUPB'])
 
 
 if __name__ == '__main__':

@@ -1,28 +1,16 @@
 # -*- coding: utf-8 -*-
-from collections import OrderedDict
-import json
-import os
 import re
 
-from regenpfeifer.util import stroke_util
+from regenpfeifer.util import stroke_util, pattern_util
 
 
 class WordPatternMatcher:
     
     def __init__(self):
-        self.escaped_characters = []
-        self.escaped_characters.append("[")
-        self.escaped_characters.append("]")
-        self.escaped_characters.append("|")
 
-        module_dir = os.path.dirname(__file__)
-        relative_patterns_dir = os.path.join("assets", "patterns")
-        absolute_patterns_dir = os.path.join(module_dir, relative_patterns_dir)
-
-        self.vowel_patterns = self.load_patterns(os.path.join(absolute_patterns_dir, 'vowel_patterns.json'))
-        self.left_patterns = self.load_patterns(os.path.join(absolute_patterns_dir, 'left_patterns.json'))
-        self.right_patterns = self.load_patterns(os.path.join(absolute_patterns_dir, 'right_patterns.json'))
-        self.final_patterns = self.load_patterns(os.path.join(absolute_patterns_dir, 'final_patterns.json'))
+        self.vowel_patterns = pattern_util.load_pattern_file('vowel_patterns.json')
+        self.left_patterns = pattern_util.load_pattern_file('left_patterns.json')
+        self.right_patterns = pattern_util.load_pattern_file('right_patterns.json')
     
     def match(self, emphasized_word):
 
@@ -74,22 +62,5 @@ class WordPatternMatcher:
                 break
         
         final_matches_list = list(final_matches)
-        for i in range(len(final_matches_list)):
-            for pattern in self.final_patterns:
-                final_matches_list[i] = re.sub(pattern, self.final_patterns[pattern], final_matches_list[i])
         final_matches_list.sort()
         return final_matches_list
-
-    def load_patterns(self, pattern_file_name):
-        with open(pattern_file_name, encoding='utf8') as json_file:
-            patterns = json.load(json_file, object_pairs_hook=OrderedDict)
-        return self.escape_patterns(patterns)
-
-    def escape_patterns(self, patterns):
-        escaped_patterns = OrderedDict()
-        for pattern in patterns:
-            escaped_pattern = pattern
-            for escaped_character in self.escaped_characters:
-                escaped_pattern = escaped_pattern.replace(escaped_character, '\\' + escaped_character)
-            escaped_patterns[escaped_pattern] = patterns[pattern]
-        return escaped_patterns

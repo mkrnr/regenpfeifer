@@ -24,20 +24,11 @@ class TestWordPatternMatcher(unittest.TestCase):
  
         self.run_match_tests(match_dict)
  
-    def test_special_cases(self):
-        match_dict = {}
-        match_dict['[e|e]et'] = ['[e|E]e[-T]']
-        match_dict['te'] = ['[T]/[e|E]']
-
-        self.run_match_tests(match_dict)
- 
     def test_disambiguations(self):
         match_dict = {}
         match_dict['s[e|ei]nen'] = ['[S][e|AEU][-PB][-N]', '[S][e|AEU][-PB][-PB]', '[S][e|AEU][-PB]e[-PB]']
         match_dict['s[e|ei]en'] = ['[S][e|AEU][-N]', '[S][e|AEU][-PB]', '[S][e|AEU]e[-PB]']
         match_dict['s[e|ei]n'] = ['[S][e|AEU][-PB]']
-        match_dict['w[e|i]ese'] = ['[W][e|AOEU][-S]/[e|E]']
-        match_dict['w[e|i]sse'] = ['[W][e|EU][-S]/[e|E]', '[W][e|EU][-S][-S]/[e|E]']
 
         self.run_match_tests(match_dict)
 
