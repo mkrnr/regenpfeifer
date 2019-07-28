@@ -18,6 +18,7 @@ class TestStrokeGenerator(unittest.TestCase):
         self.assertEqual(self.stroke_generator.generate('hattest', '2sgp'), ['HAT/TEFT'])
         self.assertEqual(self.stroke_generator.generate('zweit', 'nn'), ['SWA*EUT'])
         self.assertEqual(self.stroke_generator.generate('Zeit', 'nn'), ['SA*EUT'])
+        self.assertEqual(self.stroke_generator.generate('Abend', 'nn'), ['A*PBD'])
         self.assertEqual(self.stroke_generator.generate('Eiszeit', 'nn'), ['AEUS/SA*EUT'])
         self.assertEqual(self.stroke_generator.generate('ganz', 'nn'), ['TKPWA*PBS'])
         self.assertEqual(self.stroke_generator.generate('Wiese', 'nn'), ['WAOEUS/E', 'WAOEU/SE'])
@@ -30,7 +31,7 @@ class TestStrokeGenerator(unittest.TestCase):
         self.assertEqual(self.stroke_generator.generate('deutschem', 'attrmind'), ['TKOEUT/SHEPL'])
         self.assertEqual(self.stroke_generator.generate('gleichem', 'attrmind'), ['TKPWHRAEU/KHEPL'])
         self.assertEqual(self.stroke_generator.generate('erst', 'rb'), ['EFRT'])
-        self.assertEqual(self.stroke_generator.generate('habend', 'part'), ['HA/PWEPBD'])
+        self.assertEqual(self.stroke_generator.generate('habend', 'part'), ['HA*PBD', 'HA/PWEPBD'])
         self.assertEqual(self.stroke_generator.generate('allgemein', 'part'), ['AL/TKPWE/PHAEUPB'])
 
 
