@@ -81,14 +81,15 @@ class WordEmphasizer:
         return word
     
     def emphasize(self, word, word_type):
-        never_emp_prefixes = self.never_emp_prefixes
-        if word_type == "ppart":
-            never_emp_prefixes = self.never_emp_ppart_prefixes
-        else:
-            for verb_form in self.verb_forms:
-                if word_type.startswith(verb_form):
-                    never_emp_prefixes = self.never_emp_verb_prefixes
-                    break
+        never_emp_prefixes = []
+        if word_type != "in":
+            if word_type == "ppart":
+                never_emp_prefixes = self.never_emp_ppart_prefixes
+            else:
+                for verb_form in self.verb_forms:
+                    if word_type.startswith(verb_form):
+                        never_emp_prefixes = self.never_emp_verb_prefixes
+                        break
         
         matched_never_emp_prefix = ""
         for never_emp_prefix in never_emp_prefixes:

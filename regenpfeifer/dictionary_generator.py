@@ -56,9 +56,9 @@ if __name__ == '__main__':
         word_type = dictionary_generator.words[word].split(" ")[0].replace("\n", "")
         strokes_list = stroke_generator.generate(word, word_type)
         # TODO: remove word emphasizer to increase performance
-#         print(word + " - " + word_type + ": " + word_emphasizer.emphasize(word, word_type))
-#         print(strokes_list)
-#         print("")
+        print(word + " - " + word_type + ": " + word_emphasizer.emphasize(word, word_type))
+        print(strokes_list)
+        print("")
 
         for strokes in strokes_list:
             if strokes not in dictionary:

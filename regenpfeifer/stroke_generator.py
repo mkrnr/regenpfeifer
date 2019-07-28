@@ -42,9 +42,12 @@ class StrokeGenerator(object):
             # TODO: replace parts of word that were already matched
             emphasized_matched_syllables_list = []
             for syllable in aggregated_syllables:
-                emphasized_syllable = self.word_emphasizer.emphasize(syllable, word_type)
+                if syllable in aggregated_words:
+                    emphasized_syllable = self.word_emphasizer.emphasize(syllable, word_type)
+                else:
+                    emphasized_syllable = self.word_emphasizer.emphasize(syllable, "other")
                 matched_syllables = self.word_pattern_matcher.match(emphasized_syllable)
-                # emphasized_matched_syllables_list.append(self.word_pattern_matcher.match(emphasized_syllable))
+
                 if len(emphasized_matched_syllables_list) == 0:
                     emphasized_matched_syllables_list = matched_syllables
                 else:

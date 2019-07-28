@@ -22,6 +22,7 @@ class WordPatternMatcher:
         self.vowel_patterns = self.load_patterns(os.path.join(absolute_patterns_dir, 'vowel_patterns.json'))
         self.left_patterns = self.load_patterns(os.path.join(absolute_patterns_dir, 'left_patterns.json'))
         self.right_patterns = self.load_patterns(os.path.join(absolute_patterns_dir, 'right_patterns.json'))
+        self.final_patterns = self.load_patterns(os.path.join(absolute_patterns_dir, 'final_patterns.json'))
     
     def match(self, emphasized_word):
 
@@ -73,6 +74,9 @@ class WordPatternMatcher:
                 break
         
         final_matches_list = list(final_matches)
+        for i in range(len(final_matches_list)):
+            for pattern in self.final_patterns:
+                final_matches_list[i] = re.sub(pattern, self.final_patterns[pattern], final_matches_list[i])
         final_matches_list.sort()
         return final_matches_list
 
