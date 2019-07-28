@@ -44,6 +44,7 @@ class TestWordSyllableSplitter(unittest.TestCase):
         self.assertEqual(self.syllable_splitter.split('Abend'), ['Abend'])
         self.assertEqual(self.syllable_splitter.split('Anschlag'), ['An', 'schlag'])
         self.assertEqual(self.syllable_splitter.split('Anfrage'), ['An', 'fra', 'ge'])
+        self.assertEqual(self.syllable_splitter.split('wichtig'), ['wich', 'tig'])
 
 
 if __name__ == '__main__':
