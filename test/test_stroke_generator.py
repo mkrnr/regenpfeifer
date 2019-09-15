@@ -34,6 +34,9 @@ class TestStrokeGenerator(unittest.TestCase):
         self.run_test('erst', 'rb', ['EFRT'])
         self.run_test('habend', 'part', ['HA*PBD', 'HA/PWEPBD'])
         self.run_test('allgemein', 'part', ['AL/TKPWE/PHAEUPB'])
+        self.run_test('Beute', 'sg', ['PWOEUT/E', 'PWOEU/TE'])
+        self.run_test('Beutezug', 'sg', ['PWOEU/TE/S*UG'])
+        self.run_test('unglück', 'sg', ['UPB/TKPWHROUBG'])
     
     def run_test(self, word, word_type, result):
         self.assertEqual(self.stroke_generator.generate(word, word_type), result)

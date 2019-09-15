@@ -17,6 +17,8 @@ class TestWordEmphasizer(unittest.TestCase):
         self.run_test("beim", "in", "b[e|ei]m")
         self.run_test("erst", "rb", "[e|e]rst")
         self.run_test("bend", "other", "b[e|e]nd")
+        self.run_test("un", "other", "[e|u]n")
+        self.run_test("glück", "other", "gl[e|ü]ck")
 
     def run_test(self, word, word_type, result):
         self.assertEqual(self.word_emphasizer.emphasize(word, word_type), result)

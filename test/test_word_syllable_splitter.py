@@ -19,7 +19,7 @@ class TestWordSyllableSplitter(unittest.TestCase):
         self.run_test('müssten', ['müss', 'ten'])
         self.run_test('Wortspiele', ['Wort', 'spie', 'le'])
         self.run_test('Westspange', ['West', 'span', 'ge'])
-        self.run_test('wegreisen', ['weg', 'rei', 'sen'])
+        self.run_test('wegrennen', ['weg', 'ren', 'nen'])
         self.run_test('Weggrenze', ['Weg', 'gren', 'ze'])
         self.run_test('Westgrenze', ['West', 'gren', 'ze'])
         self.run_test('inzensiere', ['in', 'zen', 'sie', 're'])
@@ -45,6 +45,8 @@ class TestWordSyllableSplitter(unittest.TestCase):
         self.run_test('Anschlag', ['An', 'schlag'])
         self.run_test('Anfrage', ['An', 'fra', 'ge'])
         self.run_test('wichtig', ['wich', 'tig'])
+        self.run_test('unglück', ['un', 'glück'])
+        self.run_test('geblieben', ['ge', 'blie', 'ben'])
     
     def run_test(self, word, result):
         self.assertEqual(self.syllable_splitter.split(word), result)

@@ -22,11 +22,13 @@ class WordSyllableSplitter(object):
         self.preventing_vowel_split_right = ['nen']
 
         self.splitters = ['sst', 'ier']
+        self.zz1splitters = ['nn']
         self.non_connectors = ['chl']
         self.certain_connectors = ['sch', 'ch', 'ck', 'schl', 'chl']
         self.left_connectors = ['er', 'an']
         self.left_non_connectors = ['ana']
-        self.possible_connectors = ['ph', 'pf', 'br', 'pl', 'tr', 'st', 'gr', 'sp', 'kl', 'zw', 'spr', 'fr']
+        self.minus_1_2_non_connectors = [ 'eg']
+        self.possible_connectors = ['ph', 'pf', 'br', 'pl', 'tr', 'st', 'gr', 'sp', 'kl', 'zw', 'spr', 'fr', 'gl', 'bl', 'ren']
         self.separators = ['-', '*', ';', '.', '+', '=', ')', '(', '&', '!', '?', '', ':', ' ', '_', '~']
 
     def get_split_positions(self, word):
@@ -53,12 +55,11 @@ class WordSyllableSplitter(object):
 
                     v = z_minus_1 + z
                     
-                    v_old = v
                     v_extended = z_minus_2 + v
                     if v_extended in self.certain_connectors or v_extended in self.possible_connectors or v_extended in self.splitters or v_extended in self.split_vowel_pairs or v_extended in self.non_connectors:
                         v = v_extended
 
-                    v_extended = z_minus_3 + z_minus_2 + v_old
+                    v_extended = z_minus_3 + v_extended
                     if v_extended in self.certain_connectors or v_extended in self.possible_connectors or v_extended in self.splitters or v_extended in self.split_vowel_pairs or v_extended in self.non_connectors:
                         v = v_extended
                     
@@ -68,9 +69,13 @@ class WordSyllableSplitter(object):
                         if z_i_plus not in self.preventing_vowel_split_right:
                             split_positions.append(i)
                             continue
-
-                    if z1 in self.vowels and z not in self.vowels and z not in self.separators and z_minus_1 not in self.separators:
+                        
+                    if z_minus_2 + z_minus_1 in self.minus_1_2_non_connectors and v in self.possible_connectors:
+                        self.add_split_position(i, word, split_positions)
+                    elif z1 in self.vowels and z not in self.vowels and z not in self.separators and z_minus_1 not in self.separators:
                         if v in self.non_connectors:
+                            continue
+                        if z_minus_2 + z_minus_1 in self.minus_1_2_non_connectors:
                             continue
                         if v in self.certain_connectors:
                             self.add_split_position(i - len(v) + 1, word, split_positions)
@@ -80,7 +85,7 @@ class WordSyllableSplitter(object):
                             self.add_split_position(i + 2, word, split_positions)
                         elif v in self.left_connectors :
                             self.add_split_position(i + 1, word, split_positions)
-                        elif v in self.possible_connectors and z_minus_2 not in self.vowels:
+                        elif v in self.possible_connectors:
                             self.add_split_position(i - len(v) + 1, word, split_positions)
                         else:
                             self.add_split_position(i, word, split_positions)

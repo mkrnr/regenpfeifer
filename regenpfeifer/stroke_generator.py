@@ -31,12 +31,12 @@ class StrokeGenerator(object):
 
         self.final_patterns = pattern_util.load_pattern_file('final_patterns.json')
 
-        self.validated_matches = {}
+        self.matched_strokes_dict = {}
 
-    def add_to_valid_matches(self, word, matched_strokes):
-        if word not in self.validated_matches:
-            self.validated_matches[word] = []
-        self.validated_matches[word].append(matched_strokes)
+    def add_to_matched_strokes_dict(self, word, matched_strokes):
+        if word not in self.matched_strokes_dict:
+            self.matched_strokes_dict[word] = set()
+        self.matched_strokes_dict[word].add(matched_strokes)
     
     def generate(self, word, word_type):
         word = word.lower()
@@ -52,8 +52,8 @@ class StrokeGenerator(object):
             # TODO: replace parts of word that were already matched
             emphasized_matched_syllables_list = []
             for syllable in aggregated_syllables:
-                if syllable in self.validated_matches:
-                    matched_syllables = self.validated_matches[syllable]
+                if syllable in self.matched_strokes_dict:
+                    matched_syllables = self.matched_strokes_dict[syllable]
                 else:
                     if syllable in aggregated_words:
                         emphasized_syllable = self.word_emphasizer.emphasize(syllable, word_type)
@@ -77,14 +77,16 @@ class StrokeGenerator(object):
                     print('/'.join(emphasized_matched_syllables))
                     matched_strokes_list.append('/'.join(emphasized_matched_syllables))
 
+        for matched_strokes in matched_strokes_list:
+            self.add_to_matched_strokes_dict(word, matched_strokes)
+
         for i in range(len(matched_strokes_list)):
             for pattern in self.final_patterns:
                 matched_strokes_list[i] = re.sub(pattern, self.final_patterns[pattern], matched_strokes_list[i])
 
         valid_strokes_list = []
         for matched_strokes in matched_strokes_list:
-            if self.stroke_validator.validate(matched_strokes):
-                self.add_to_valid_matches(word, matched_strokes)
+            if matched_strokes not in valid_strokes_list and self.stroke_validator.validate(matched_strokes):
                 valid_strokes_list.append(matched_strokes)
  
         stripped_strokes_list = []
