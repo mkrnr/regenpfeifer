@@ -4,14 +4,13 @@ Created on May 11, 2019
 @author: mkoerner
 '''
 import itertools
-import re
 
 from regenpfeifer.stroke_aggregator import StrokeAggregator
 from regenpfeifer.stroke_validator import StrokeValidator
-from regenpfeifer.util import stroke_util, pattern_util
+from regenpfeifer.util import stroke_util
 from regenpfeifer.word_emphasizer import WordEmphasizer
 from regenpfeifer.word_pattern_matcher import WordPatternMatcher
-from regenpfeifer.word_syllable_splitter import WordSyllableSplitter
+from regenpfeifer.word_splitter import WordSplitter
 
 
 class StrokeGenerator(object):
@@ -19,30 +18,27 @@ class StrokeGenerator(object):
     Provides methods for generating strokes_list from German words. 
     '''
 
-    def __init__(self):
+    def __init__(self, word_list):
         '''
         Constructor
         '''
-        self.word_syllable_splitter = WordSyllableSplitter()
+        self.word_splitter = WordSplitter(word_list)
         self.word_emphasizer = WordEmphasizer()
         self.word_pattern_matcher = WordPatternMatcher()
         self.stroke_aggregator = StrokeAggregator()
         self.stroke_validator = StrokeValidator()
 
-        self.final_patterns = pattern_util.load_pattern_file('final_patterns.json')
+        self.valid_strokes_dict = {}
 
-        self.matched_strokes_dict = {}
-
-    def add_to_matched_strokes_dict(self, word, matched_strokes):
-        if word not in self.matched_strokes_dict:
-            self.matched_strokes_dict[word] = set()
-        self.matched_strokes_dict[word].add(matched_strokes)
+    def add_to_valid_strokes_dict(self, word, valid_strokes):
+        if word not in self.valid_strokes_dict:
+            self.valid_strokes_dict[word] = set()
+        self.valid_strokes_dict[word].add(valid_strokes)
     
     def generate(self, word, word_type):
         word = word.lower()
         
-        splitted_word = self.word_syllable_splitter.split(word)
-        # emphazised_word = self.word_emphasizer.emphasize(word, word_type)
+        splitted_word = self.word_splitter.split(word)
         aggregated_words = self.stroke_aggregator.aggregate_strokes('/'.join(splitted_word))
         
         matched_strokes_list = []
@@ -52,10 +48,10 @@ class StrokeGenerator(object):
             # TODO: replace parts of word that were already matched
             emphasized_matched_syllables_list = []
             for syllable in aggregated_syllables:
-                if syllable in self.matched_strokes_dict:
-                    matched_syllables = self.matched_strokes_dict[syllable]
+                if syllable in self.valid_strokes_dict:
+                    matched_syllables = self.valid_strokes_dict[syllable]
                 else:
-                    if syllable in aggregated_words:
+                    if syllable == word:
                         emphasized_syllable = self.word_emphasizer.emphasize(syllable, word_type)
                     else:
                         emphasized_syllable = self.word_emphasizer.emphasize(syllable, "other")
@@ -77,17 +73,11 @@ class StrokeGenerator(object):
                     print('/'.join(emphasized_matched_syllables))
                     matched_strokes_list.append('/'.join(emphasized_matched_syllables))
 
-        for matched_strokes in matched_strokes_list:
-            self.add_to_matched_strokes_dict(word, matched_strokes)
-
-        for i in range(len(matched_strokes_list)):
-            for pattern in self.final_patterns:
-                matched_strokes_list[i] = re.sub(pattern, self.final_patterns[pattern], matched_strokes_list[i])
-
         valid_strokes_list = []
         for matched_strokes in matched_strokes_list:
             if matched_strokes not in valid_strokes_list and self.stroke_validator.validate(matched_strokes):
                 valid_strokes_list.append(matched_strokes)
+                self.add_to_valid_strokes_dict(word, matched_strokes)
  
         stripped_strokes_list = []
         for valid_strokes in valid_strokes_list:

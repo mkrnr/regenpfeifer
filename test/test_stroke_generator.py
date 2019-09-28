@@ -10,7 +10,10 @@ from regenpfeifer.stroke_generator import StrokeGenerator
 class TestStrokeGenerator(unittest.TestCase):
 
     def setUp(self):
-        self.stroke_generator = StrokeGenerator()
+        words = []
+        words.append("beute")
+        words.append("zug")
+        self.stroke_generator = StrokeGenerator(words)
 
     def test_easy_words(self):
         self.run_test('sein', 'inf', ['SAEUPB'])
@@ -21,10 +24,10 @@ class TestStrokeGenerator(unittest.TestCase):
         self.run_test('Abend', 'nn', ['A*PBD'])
         self.run_test('Eiszeit', 'nn', ['AEUS/SA*EUT'])
         self.run_test('ganz', 'nn', ['TKPWA*PBS'])
-        self.run_test('Wiese', 'nn', ['WAOEUS/E', 'WAOEU/SE'])
-        self.run_test('Gehege', 'nn', ['TKPWE/HEG/E', 'TKPWE/HE/TKPWE'])
+        self.run_test('Wiese', 'nn', ['WAOEU/SE'])
+        self.run_test('Gehege', 'nn', ['TKPWE/HE/TKPWE'])
         self.run_test('rennen', 'inf', ['REPBN', 'REPB/TPHEPB'])
-        self.run_test('regelte', '1sgp', ['RE/TKPWELT/E', 'RE/TKPWEL/TE'])
+        self.run_test('regelte', '1sgp', ['RE/TKPWEL/TE'])
         self.run_test('wandernd', 'part', ['WAPB/TKERPBD'])
         self.run_test('gingst', '2sgp', ['TKPWEUFPBGT'])
         self.run_test('neu', 'other', ['TPHOEU'])
@@ -34,9 +37,11 @@ class TestStrokeGenerator(unittest.TestCase):
         self.run_test('erst', 'rb', ['EFRT'])
         self.run_test('habend', 'part', ['HA*PBD', 'HA/PWEPBD'])
         self.run_test('allgemein', 'part', ['AL/TKPWE/PHAEUPB'])
-        self.run_test('Beute', 'sg', ['PWOEUT/E', 'PWOEU/TE'])
+        self.run_test('Beute', 'sg', [ 'PWOEU/TE'])
         self.run_test('Beutezug', 'sg', ['PWOEU/TE/S*UG'])
         self.run_test('unglück', 'sg', ['UPB/TKPWHROUBG'])
+        self.run_test('sollend', 'part', ['SOL/HREPBD'])
+        self.run_test('Aufgaben', 'pl', ['AUF/TKPWABN', 'AUF/TKPWA*PB', 'AUF/TKPWA/PWEPB'])
     
     def run_test(self, word, word_type, result):
         self.assertEqual(self.stroke_generator.generate(word, word_type), result)

@@ -4,6 +4,7 @@ Created on Apr 22, 2019
 @author: mkoerner
 '''
 import unittest
+
 from regenpfeifer.word_emphasizer import WordEmphasizer
 
 
@@ -13,6 +14,7 @@ class TestWordEmphasizer(unittest.TestCase):
         self.word_emphasizer = WordEmphasizer()
 
     def test_simple_words(self):
+        print()
         self.run_test("wegen", "inf", "w[e|e]gen")
         self.run_test("beim", "in", "b[e|ei]m")
         self.run_test("erst", "rb", "[e|e]rst")
