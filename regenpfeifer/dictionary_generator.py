@@ -20,7 +20,7 @@ class DictionaryGenerator:
         i = 0
         with codecs.open(derewo_file_path, "r", "utf-8") as f:
             for line in f:
-                line_split = line.split('\t')
+                line_split = line.split(',')
                 word = line_split[0]
 
                 if word_limit > 0 and len(word) > word_limit:
