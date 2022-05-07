@@ -65,7 +65,7 @@ class StrokeValidator(object):
         for stroke_part in stroke_parts:
             if stroke_part.startswith("[-"):
                 right_consonants.append(stroke_part)
-            elif stroke_part.startswith("[e|")or stroke_part is '[*]':
+            elif stroke_part.startswith("[e|") or stroke_part == '[*]':
                 vowels.append(stroke_part)
             else:
                 left_consonants.append(stroke_part)

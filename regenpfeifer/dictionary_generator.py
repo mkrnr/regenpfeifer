@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import codecs
 from collections import OrderedDict
 import collections
@@ -86,12 +85,12 @@ if __name__ == '__main__':
             if strokes not in dictionary:
                 dictionary[strokes] = word
             elif dictionary[strokes] != word:
-                    duplicate_line = '\tduplicate:\t' + word + ' - ' + word_type + ': ' + strokes + ' - already translated as ' + dictionary[strokes]
-                    print(duplicate_line)
-                    unmatched_log.write(duplicate_line + '\n')
-                    duplicate_count += 1
+                duplicate_line = '\tduplicate:\t' + word + ' - ' + word_type + ': ' + strokes + ' - already translated as ' + dictionary[strokes]
+                print(duplicate_line)
+                unmatched_log.write(duplicate_line + '\n')
+                duplicate_count += 1
 
-        if i % 100 is 0:
+        if i % 100 == 0:
             elapsed = (time.time() - start_time)
             mins = int(elapsed / 60)
             secs = int(elapsed % 60)
@@ -100,7 +99,7 @@ if __name__ == '__main__':
             unmatched_log.write(stats_line + '\n')
         i += 1
 
-        if i % 1000 is 0:
+        if i % 1000 == 0:
             dictionary_generator.write_to_file(dictionary, dictionary_file_path)
 
     dictionary_generator.write_to_file(dictionary, dictionary_file_path)

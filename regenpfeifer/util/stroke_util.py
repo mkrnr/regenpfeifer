@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
 
-    
 def join(stroke_parts):
     return "".join(str(x) for x in stroke_parts)
 
@@ -9,11 +7,11 @@ def split(stroke):
     stroke_parts = []
     stroke_part = ""
     for char in stroke:
-        if char is "[":
+        if char == "[":
             if stroke_part:
                 stroke_parts.append(stroke_part)
             stroke_part = "["
-        elif char is "]":
+        elif char == "]":
             if stroke_part:
                 stroke_part += char
                 stroke_parts.append(stroke_part)
@@ -40,7 +38,8 @@ def remove_markup(strokes):
 def remove_excess_hyphens(stroke):
     # if there's a vowel or *, no hyphens are needed at all
     if "[e|" in stroke or "[*]" in stroke:
-        return stroke.replace("-", "")
+        return stroke.replace("-", "")
+
     # otherwise the first hyphen is left but all others are removed
     stroke_parts = split(stroke)
     first_hyphen_seen = False

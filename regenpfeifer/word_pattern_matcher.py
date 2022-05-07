@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import re
 
 from regenpfeifer.util import stroke_util, pattern_util

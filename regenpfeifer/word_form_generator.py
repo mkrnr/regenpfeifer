@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from collections import OrderedDict
 
 from pattern.de import MALE, FEMALE, NEUTRAL, SUBJECT, OBJECT, INDIRECT, PROPERTY  # @UnresolvedImport

@@ -3,7 +3,6 @@ import codecs
 from collections import OrderedDict
 from regenpfeifer import word_form_generator
 
-#from hyphen import Hyphenator
 class WordListGenerator:
     
     def __init__(self):
