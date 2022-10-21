@@ -1,8 +1,7 @@
-
 def join(stroke_parts):
     return "".join(str(x) for x in stroke_parts)
 
-    
+
 def split(stroke):
     stroke_parts = []
     stroke_part = ""
@@ -20,7 +19,7 @@ def split(stroke):
             stroke_part += char
     if stroke_part:
         stroke_parts.append(stroke_part)
-    return stroke_parts 
+    return stroke_parts
 
 
 def remove_markup(strokes):
@@ -85,9 +84,11 @@ def reposition_asterisks(stripped_strokes):
             current_before_asterisk = before_asterisk
             for i in range(len(stripped_stroke)):
                 key = stripped_stroke[i]
-            #    if vowels_in_stroke:
+                #    if vowels_in_stroke:
                 if key in current_before_asterisk:
-                    current_before_asterisk = get_all_after_letter(current_before_asterisk, key)
+                    current_before_asterisk = get_all_after_letter(
+                        current_before_asterisk, key
+                    )
                     continue
                 index_for_asterisk = i
                 break
@@ -111,5 +112,4 @@ def get_all_after_letter(letters, letter):
 
 
 def insert_asterisk(stripped_stroke, index):
-    return stripped_stroke[:index] + '*' + stripped_stroke[index:]
-    
+    return stripped_stroke[:index] + "*" + stripped_stroke[index:]

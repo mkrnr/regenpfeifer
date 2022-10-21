@@ -16,8 +16,29 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pytest
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-      - name: Test with pytest
+      #----------------------------------------------
+      #              run pytest
+      #----------------------------------------------
+      - name: Run pytest
         run: |
           pytest
+      #----------------------------------------------
+      #              run black
+      #----------------------------------------------
+      - name: Run black
+        run: |
+          black --check .
+      #----------------------------------------------
+      #              run flake8
+      #----------------------------------------------
+      - name: Run flake8
+        run: |
+          flake8
+      #----------------------------------------------
+      #              run mypy
+      # missing imports are ignored because of marisa_trie
+      #----------------------------------------------
+      - name: Run mypy
+        run: |
+          mypy --ignore-missing-imports .

@@ -12,3 +12,20 @@ To run the program, the dependencies listed in [requirements.txt](requirements.t
 There are a number of unittests that also give a good idea on how the individual classes word.
 
 
+## Development
+
+Code formatting is done with `black`:
+```commandline
+black .
+```
+
+We also use `flake8`:
+```commandline
+flake8 --exclude venv
+```
+
+And `mypy`:
+```commandline
+mypy --ignore-missing-imports --exclude venv .
+```
+Missing imports are ignored because of `marisa_trie`.

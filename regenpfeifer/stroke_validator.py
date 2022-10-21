@@ -1,25 +1,25 @@
-'''
+"""
 Created on May 11, 2019
 
 @author: mkoerner
-'''
+"""
 from regenpfeifer.util import stroke_util
 
 
 class StrokeValidator(object):
-    '''
+    """
     classdocs
-    '''
+    """
 
     def __init__(self):
-        '''
+        """
         Constructor
-        '''
+        """
 
-    left_consonant_keys = ['S', 'T', 'K', 'P', 'W', 'H', 'R']
-    vowel_keys = ['A', 'O', '*', 'E', 'U']
-    right_consonant_keys = ['-', 'F', 'R', 'P', 'B', 'L', 'G', 'T', 'S', 'D', 'N']
-    
+    left_consonant_keys = ["S", "T", "K", "P", "W", "H", "R"]
+    vowel_keys = ["A", "O", "*", "E", "U"]
+    right_consonant_keys = ["-", "F", "R", "P", "B", "L", "G", "T", "S", "D", "N"]
+
     def validate(self, strokes):
 
         # ignore asterisks
@@ -27,7 +27,7 @@ class StrokeValidator(object):
 
         strokes = strokes.split("/")
         for stroke in strokes:
-            
+
             stroke_parts = stroke_util.split(stroke)
 
             passed_vowel = False
@@ -49,32 +49,36 @@ class StrokeValidator(object):
             if passed_vowel and right_hand_consonant_before_passed_vowel:
                 # there was a right hand consonant on the left side
                 return False
-            
+
             # check steno order
             if not self.validate_order(stroke_parts):
                 return False
-        
-        return True 
+
+        return True
 
     def validate_order(self, stroke_parts):
 
-        # first check 
+        # first check
         left_consonants = []
         vowels = []
         right_consonants = []
         for stroke_part in stroke_parts:
             if stroke_part.startswith("[-"):
                 right_consonants.append(stroke_part)
-            elif stroke_part.startswith("[e|") or stroke_part == '[*]':
+            elif stroke_part.startswith("[e|") or stroke_part == "[*]":
                 vowels.append(stroke_part)
             else:
                 left_consonants.append(stroke_part)
-                
-        left_consonants_valid = self.validate_order_for_keys(left_consonants, self.left_consonant_keys)
+
+        left_consonants_valid = self.validate_order_for_keys(
+            left_consonants, self.left_consonant_keys
+        )
         vowels_valid = self.validate_order_for_keys(vowels, self.vowel_keys)
-        right_consonants_valid = self.validate_order_for_keys(right_consonants, self.right_consonant_keys)
-        return  left_consonants_valid and vowels_valid and right_consonants_valid
-    
+        right_consonants_valid = self.validate_order_for_keys(
+            right_consonants, self.right_consonant_keys
+        )
+        return left_consonants_valid and vowels_valid and right_consonants_valid
+
     def validate_order_for_keys(self, stroke_parts, keys):
         stroke = stroke_util.join(stroke_parts)
         stroke_without_excess_hyphens = stroke_util.remove_excess_hyphens(stroke)
@@ -90,5 +94,5 @@ class StrokeValidator(object):
             # stroke_key was not in keys
             if not key_matched:
                 return False
-            
+
         return True

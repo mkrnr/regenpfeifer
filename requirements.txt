@@ -1,1 +1,5 @@
 marisa_trie==0.7.7
+pytest
+flake8
+black
+mypy
