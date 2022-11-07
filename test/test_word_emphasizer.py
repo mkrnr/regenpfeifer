@@ -29,8 +29,8 @@ class TestWordEmphasizer(unittest.TestCase):
         self.run_test("missfallen", "inf", "missf[e|a]llen")
         self.run_test("Missfallen", "other", "M[e|i]ssfallen")
 
-    def run_test(self, word, word_type, result):
-        self.assertEqual(self.word_emphasizer.emphasize(word, word_type), result)
+    def run_test(self, word, word_type, expected):
+        self.assertEqual(expected, self.word_emphasizer.emphasize(word, word_type))
 
 
 if __name__ == "__main__":

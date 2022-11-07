@@ -38,8 +38,8 @@ class TestWordSplitter(unittest.TestCase):
         self.run_test("Zurückliegen", ["Zu", "rück", "lie", "gen"])
         self.run_test("Erzbistum", ["Erz", "bis", "tum"])
 
-    def run_test(self, word, result):
-        self.assertEqual(self.word_splitter.split(word), result)
+    def run_test(self, word, expected):
+        self.assertEqual(expected, self.word_splitter.split(word))
 
 
 if __name__ == "__main__":

@@ -23,8 +23,8 @@ class TestStrokeAggregator(unittest.TestCase):
         )
         self.run_test("Zu/sammen", ["Zusammen", "Zu/sammen"])
 
-    def run_test(self, word, result):
-        self.assertEqual(self.stroke_aggregator.aggregate_strokes(word), result)
+    def run_test(self, word, expected):
+        self.assertEqual(expected, self.stroke_aggregator.aggregate_strokes(word))
 
 
 if __name__ == "__main__":

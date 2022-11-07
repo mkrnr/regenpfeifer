@@ -48,9 +48,11 @@ class TestWordSyllableSplitter(unittest.TestCase):
         self.run_test("neue", ["neu", "e"])
         # self.run_test('andere', ['an', 'de', 're'])
         self.run_test("altes", ["al", "tes"])
+        self.run_test("müssten", ["müss", "ten"])
+        self.run_test("seinen", ["sei", "nen"])
 
-    def run_test(self, word, result):
-        self.assertEqual(self.syllable_splitter.split(word), result)
+    def run_test(self, word, expected):
+        self.assertEqual(expected, self.syllable_splitter.split(word))
 
 
 if __name__ == "__main__":

@@ -1,10 +1,12 @@
 import re
 
+from regenpfeifer.stroke_validator import StrokeValidator
 from regenpfeifer.util import stroke_util, pattern_util
 
 
 class WordPatternMatcher:
     def __init__(self):
+        self.stroke_validator = StrokeValidator()
 
         self.vowel_patterns = pattern_util.load_pattern_file("vowel_patterns.json")
         self.left_patterns = pattern_util.load_pattern_file("left_patterns.json")
@@ -42,7 +44,16 @@ class WordPatternMatcher:
         word_parts = stroke_util.split(match)
         generated_matches.update(self.generate_left_consonants(word_parts))
         generated_matches.update(self.generate_right_consonants(word_parts))
-        return generated_matches
+
+        validated_matches = set()
+        for generated_match in generated_matches:
+            stripped_generated_match = stroke_util.strip_unmatched_letters(
+                generated_match
+            )
+            if self.stroke_validator.validate(stripped_generated_match):
+                validated_matches.add(generated_match)
+
+        return validated_matches
 
     def generate_left_consonants(self, word_parts):
         generated_matches = set()

@@ -34,6 +34,20 @@ def remove_markup(strokes):
     return "/".join(stripped_strokes)
 
 
+def strip_unmatched_letters(match):
+    strokes = match.split("/")
+    stripped_strokes = []
+    for stroke in strokes:
+        stripped_stroke = ""
+        stroke_parts = split(stroke)
+        for stroke_part in stroke_parts:
+            if stroke_part.startswith("["):
+                stripped_stroke += stroke_part
+        if stripped_stroke:
+            stripped_strokes.append(stripped_stroke)
+    return "/".join(stripped_strokes)
+
+
 def remove_excess_hyphens(stroke):
     # if there's a vowel or *, no hyphens are needed at all
     if "[e|" in stroke or "[*]" in stroke:

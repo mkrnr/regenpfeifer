@@ -12,7 +12,7 @@ class TestStrokeValidator(unittest.TestCase):
         self.stroke_validator = StrokeValidator()
 
     def test_simple_words(self):
-        self.run_test("[TP][e|OU][-R][-N]", True)
+        self.run_test("[TP][e|OU][-R]", True)
 
     def test_multiple_strokes(self):
         self.run_test("[TKPW][HR][e|AEU]/[KH][e|E][-PL]", True)
@@ -45,8 +45,8 @@ class TestStrokeValidator(unittest.TestCase):
     def test_strokes_with_asterisk(self):
         self.run_test("[TKPW][e|A][-PB][-S]*", True)
 
-    def run_test(self, matched_stroke, result):
-        self.assertEqual(self.stroke_validator.validate(matched_stroke), result)
+    def run_test(self, matched_stroke, expected):
+        self.assertEqual(expected, self.stroke_validator.validate(matched_stroke))
 
 
 if __name__ == "__main__":

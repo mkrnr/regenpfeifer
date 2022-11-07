@@ -16,9 +16,9 @@ class StrokeValidator(object):
         Constructor
         """
 
-    left_consonant_keys = ["S", "T", "K", "P", "W", "H", "R"]
+    left_consonant_keys = ["Z", "S", "T", "K", "P", "W", "H", "R"]
     vowel_keys = ["A", "O", "*", "E", "U"]
-    right_consonant_keys = ["-", "F", "R", "P", "B", "L", "G", "T", "S", "D", "N"]
+    right_consonant_keys = ["-", "F", "R", "P", "B", "L", "G", "T", "S", "D", "Z"]
 
     def validate(self, strokes):
 
