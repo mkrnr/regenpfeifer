@@ -101,7 +101,6 @@ class WordSyllableSplitter(object):
         )
 
     def compute_for_position(self, v, i, word, split_positions):
-
         z_minus_1 = word[i - 1]
         z = word[i]
         word_length = len(word)

@@ -21,13 +21,11 @@ class StrokeValidator(object):
     right_consonant_keys = ["-", "F", "R", "P", "B", "L", "G", "T", "S", "D", "Z"]
 
     def validate(self, strokes):
-
         # ignore asterisks
         strokes = strokes.replace("*", "")
 
         strokes = strokes.split("/")
         for stroke in strokes:
-
             stroke_parts = stroke_util.split(stroke)
 
             passed_vowel = False
@@ -57,7 +55,6 @@ class StrokeValidator(object):
         return True
 
     def validate_order(self, stroke_parts):
-
         # first check
         left_consonants = []
         vowels = []

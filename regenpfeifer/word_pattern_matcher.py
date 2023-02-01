@@ -13,7 +13,6 @@ class WordPatternMatcher:
         self.right_patterns = pattern_util.load_pattern_file("right_patterns.json")
 
     def match(self, emphasized_word):
-
         # match vowel first
         for vowel in self.vowel_patterns:
             emphasized_word = re.sub(vowel, self.vowel_patterns[vowel], emphasized_word)
@@ -22,7 +21,6 @@ class WordPatternMatcher:
 
         final_matches = set()
         while True:
-
             new_matches = set()
             for match in matches:
                 generated_matches = self.generate_matches(match)

@@ -21,6 +21,8 @@ class DictionaryGenerator:
         unmatched_count = 0
         duplicate_count = 0
         for word in dictionary_generator.words:
+            if word in excluded_words:
+                continue
             word_type = dictionary_generator.words[word].split(" ")[0].replace("\n", "")
             strokes_list = stroke_generator.generate(word, word_type)
             # TODO: remove word emphasizer to increase performance
@@ -44,6 +46,8 @@ class DictionaryGenerator:
                 unmatched_count += 1
 
             for strokes in strokes_list:
+                if strokes in excluded_strokes:
+                    continue
                 if strokes not in dictionary:
                     dictionary[strokes] = word
                 elif dictionary[strokes] != word:
@@ -119,11 +123,21 @@ if __name__ == "__main__":
     unmatched_log_path = sys.argv[3]
     list_limit = int(sys.argv[4])
     word_limit = int(sys.argv[5])
+    if len(sys.argv) == 7:
+        excluded_translations_path = sys.argv[6]
+
     dictionary_generator = DictionaryGenerator()
 
+    # TODO move this logic into the class
     dictionary_generator.read_word_list(
         word_list_file_path, list_limit=list_limit, word_limit=word_limit
     )
+
+    if excluded_translations_path:
+        with open(excluded_translations_path, "r") as f:
+            excluded_translations = json.load(f)
+            excluded_strokes = set(excluded_translations.keys())
+            excluded_words = set(excluded_translations.values())
 
     unmatched_log = open(
         unmatched_log_path.replace(

@@ -1,5 +1,5 @@
 marisa_trie==0.7.7
-pytest
-flake8
-black
-mypy
+pytest==7.2.1
+flake8==6.0.0
+black==23.1.0
+mypy==0.991

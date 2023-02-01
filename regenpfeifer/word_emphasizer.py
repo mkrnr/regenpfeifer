@@ -79,7 +79,6 @@ class WordEmphasizer:
         return word
 
     def emphasize(self, word, word_type):
-
         matched_never_emp_prefix = ""
         for never_emp_prefix in self.get_never_emp_prefixes(word_type):
             if word == never_emp_prefix:
