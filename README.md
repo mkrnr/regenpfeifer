@@ -29,3 +29,5 @@ And `mypy`:
 mypy --ignore-missing-imports --exclude venv .
 ```
 Missing imports are ignored because of `marisa_trie`.
+
+The checks can also be executed at once with `soucre run_checks.sh`.
