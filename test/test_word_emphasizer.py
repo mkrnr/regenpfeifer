@@ -13,13 +13,15 @@ class TestWordEmphasizer(unittest.TestCase):
         self.word_emphasizer = WordEmphasizer()
 
     def test_simple_words(self):
-        print()
         self.run_test("wegen", "inf", "w[e|e]gen")
         self.run_test("beim", "in", "b[e|ei]m")
         self.run_test("erst", "rb", "[e|e]rst")
         self.run_test("bend", "other", "b[e|e]nd")
         self.run_test("un", "other", "[e|u]n")
         self.run_test("glück", "other", "gl[e|ü]ck")
+
+    def test_double_vowel_words(self):
+        self.run_test("Boot", "other", "B[e|o]ot")
 
     def test_compound_words(self):
         self.run_test("Baustellenschild", "other", "B[e|au]stellenschild")

@@ -38,9 +38,10 @@ class TestStrokeGenerator(unittest.TestCase):
         self.run_test("Beute", "sg", ["PWOEU/TE"])
         self.run_test("Beutezug", "sg", ["PWOEU/TE/ZUG"])
         self.run_test("unglück", "sg", ["UPB/TKPWHROUBG"])
-        self.run_test("sollend", "part", ["SOL/HREPBD"])
+        self.run_test("sollend", "part", ["SOPBLD", "SOL/HREPBD"])
         self.run_test("Aufgaben", "pl", ["AUF/TKPWA/PWEPB"])
         self.run_test("seinen", "prp$", ["SAEU/TPHEPB"])
+        self.run_test("Boot", "nn", ["PWAOT"])
 
     def run_test(self, word, word_type, expected):
         self.assertEqual(expected, self.stroke_generator.generate(word, word_type))

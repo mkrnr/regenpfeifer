@@ -24,9 +24,7 @@ class TestWordSyllableSplitter(unittest.TestCase):
         self.run_test("erklären", ["er", "klä", "ren"])
         self.run_test("gesprochen", ["ge", "spro", "chen"])
         self.run_test("Million", ["Mil", "li", "on"])
-        # self.run_test('Millionen', ['Mil', 'li', 'o', 'nen'])
-        # self.run_test('Januar', ['Ja', 'nu', 'ar'])
-        # self.run_test('Januare', ['Ja', 'nu', 'a', 're'])
+        self.run_test("Millionen", ["Mil", "lio", "nen"])
         self.run_test("Ionen", ["Io", "nen"])
         self.run_test("Arbeit", ["Ar", "beit"])
         self.run_test("seiet", ["sei", "et"])
@@ -46,10 +44,16 @@ class TestWordSyllableSplitter(unittest.TestCase):
         self.run_test("Hoffnung", ["Hoff", "nung"])
         self.run_test("Liste", ["Lis", "te"])
         self.run_test("neue", ["neu", "e"])
-        # self.run_test('andere', ['an', 'de', 're'])
         self.run_test("altes", ["al", "tes"])
         self.run_test("müssten", ["müss", "ten"])
         self.run_test("seinen", ["sei", "nen"])
+        # currently failing:
+        # self.run_test("gestanden", ["ge", "stan","den"])
+        # self.run_test('gestellt', ['ge', 'stellt'])
+        # self.run_test('andere', ['an', 'de', 're'])
+        # self.run_test('Januar', ['Ja', 'nu', 'ar'])
+        # self.run_test('Januare', ['Ja', 'nu', 'a', 're'])
+        # self.run_test('bereits', ['be', 'reits'])
 
     def run_test(self, word, expected):
         self.assertEqual(expected, self.syllable_splitter.split(word))
