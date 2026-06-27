@@ -1,5 +1,3 @@
-import re
-
 from regenpfeifer.stroke_validator import StrokeValidator
 from regenpfeifer.util import stroke_util, pattern_util
 
@@ -13,9 +11,9 @@ class WordPatternMatcher:
         self.right_patterns = pattern_util.load_pattern_file("right_patterns.json")
 
     def match(self, emphasized_word):
-        # match vowel first
+        # match vowel first (patterns are literal substrings)
         for vowel in self.vowel_patterns:
-            emphasized_word = re.sub(vowel, self.vowel_patterns[vowel], emphasized_word)
+            emphasized_word = emphasized_word.replace(vowel, self.vowel_patterns[vowel])
         matches = set()
         matches.add(emphasized_word)
 
@@ -60,8 +58,8 @@ class WordPatternMatcher:
                 break
             word_part_length = len(word_parts[i])
             for pattern in self.left_patterns:
-                matched_word_part = re.sub(
-                    pattern, self.left_patterns[pattern], word_parts[i]
+                matched_word_part = word_parts[i].replace(
+                    pattern, self.left_patterns[pattern]
                 )
                 if word_part_length != len(matched_word_part):
                     word_parts[i] = matched_word_part
@@ -75,8 +73,8 @@ class WordPatternMatcher:
             if after_vowel:
                 word_part_length = len(word_parts[i])
                 for pattern in self.right_patterns:
-                    matched_word_part = re.sub(
-                        pattern, self.right_patterns[pattern], word_parts[i]
+                    matched_word_part = word_parts[i].replace(
+                        pattern, self.right_patterns[pattern]
                     )
                     if word_part_length != len(matched_word_part):
                         word_parts_copy = word_parts.copy()
