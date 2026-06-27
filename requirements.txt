@@ -1,4 +1,4 @@
-marisa_trie==0.7.7
+marisa-trie>=0.7.7
 pytest==7.2.1
 flake8==6.0.0
 black==23.1.0
