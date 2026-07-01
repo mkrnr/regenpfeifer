@@ -84,7 +84,7 @@ class StrokeValidator(object):
         for stroke_key in stripped_stroke:
             key_matched = False
             for i in range(key_index, len(keys)):
-                if stroke_key is keys[i]:
+                if stroke_key == keys[i]:
                     key_index = i + 1
                     key_matched = True
                     break

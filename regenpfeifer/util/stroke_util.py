@@ -79,7 +79,7 @@ def contains_vowel(stripped_stroke):
     return False
 
 
-before_asterisk = "STKPWHRAO"
+before_asterisk = "ZSTKPWHRAO"
 
 
 def reposition_asterisks(stripped_strokes):
@@ -117,7 +117,7 @@ def get_all_after_letter(letters, letter):
     filtered_letters = ""
     letter_reached = False
     for current_letter in letters:
-        if current_letter is letter:
+        if current_letter == letter:
             letter_reached = True
             continue
         if letter_reached:

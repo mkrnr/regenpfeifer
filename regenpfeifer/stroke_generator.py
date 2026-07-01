@@ -102,4 +102,43 @@ class StrokeGenerator(object):
             formatted_strokes = stroke_util.remove_markup(valid_strokes)
             formatted_strokes = stroke_util.reposition_asterisks(formatted_strokes)
             stripped_strokes_list.append(formatted_strokes)
+
+        # Recovery for words the syllabifier mis-splits (see helpers). Each only
+        # fires when normal generation came back empty, so neither can change a
+        # word that already generated.
+        if not stripped_strokes_list:
+            stripped_strokes_list = self._recover_trailing_schwa(word, word_type)
+        if not stripped_strokes_list:
+            stripped_strokes_list = self._recover_vowel_initial(word, word_type)
+
         return stripped_strokes_list
+
+    def _recover_trailing_schwa(self, word, word_type):
+        """Recover words ending in an unstressed -e/-en that the syllabifier
+        mis-splits (unsere -> uns/ere), leaving a syllable that can't reduce so
+        nothing generates. Peel the ending into its own stroke (E / EPB) and
+        generate the stem -- this mirrors the e$/en$ recovery mkrnr defined in
+        final_patterns.json but that was never wired into the matcher. -e/-en are
+        ASCII so the slice is codepoint-safe; each branch recurses on a strictly
+        shorter stem, so it terminates. Returns [] when it doesn't apply.
+        """
+        if word.endswith("en") and len(word) > 4:
+            return [s + "/EPB" for s in self.generate(word[:-2], word_type)]
+        if word.endswith("e") and len(word) > 3:
+            return [s + "/E" for s in self.generate(word[:-1], word_type)]
+        return []
+
+    def _recover_vowel_initial(self, word, word_type):
+        """Recover bare-vowel-initial words the syllabifier leaves un-split
+        (egal -> ['egal']), so the second vowel can't reduce and nothing
+        generates. Peel the leading vowel into its own stroke and generate the
+        rest (egal -> E/TKPWAL). The guard requires the second char to be a
+        consonant, which excludes au-/ei-/eu- diphthongs and keeps the recursion
+        from re-entering on the peeled remainder. Returns [] when it doesn't apply.
+        """
+        if word[:1] in "aeiouäöü" and len(word) > 2 and word[1] not in "aeiouäöü":
+            head = self.generate(word[0], word_type)
+            rest = self.generate(word[1:], word_type)
+            if head and rest:
+                return [head[0] + "/" + r for r in rest]
+        return []
