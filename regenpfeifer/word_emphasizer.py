@@ -84,13 +84,19 @@ class WordEmphasizer:
             if word == never_emp_prefix:
                 return self.emp_vowel(word)
             if word.startswith(never_emp_prefix):
+                # Strip only the first matching prefix: continuing the loop
+                # would strip again from the remainder and keep only the last
+                # match, so beerdigen lost its "be" and emphasized "digen".
                 matched_never_emp_prefix = never_emp_prefix
                 word = re.sub("^" + matched_never_emp_prefix, "", word)
+                break
 
         for diphtong in self.diphtongs:
             if diphtong in word:
+                # Mark only the first occurrence: replace-all put two stressed
+                # vowels into aufbauen, which no validator accepts.
                 return matched_never_emp_prefix + word.replace(
-                    diphtong, "[e|" + diphtong + "]"
+                    diphtong, "[e|" + diphtong + "]", 1
                 )
 
         matched_usually_emp_prefix = self.get_usually_emp_prefix(word)
@@ -129,8 +135,12 @@ class WordEmphasizer:
         return never_emp_prefixes
 
     def get_usually_emp_prefix(self, word):
+        # Longest match wins: "da" must not beat "dar" for daran/darauf, or the
+        # stressed separable prefix ends up split across the wrong boundary.
         matched_usually_emp_prefix = ""
         for usually_emp_prefix in self.usually_emp_prefixes:
-            if word.startswith(usually_emp_prefix):
+            if word.startswith(usually_emp_prefix) and len(usually_emp_prefix) > len(
+                matched_usually_emp_prefix
+            ):
                 matched_usually_emp_prefix = usually_emp_prefix
         return matched_usually_emp_prefix
