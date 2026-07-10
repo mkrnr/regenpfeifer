@@ -88,8 +88,12 @@ def reposition_asterisks(stripped_strokes):
     for stripped_stroke in splitted_stripped_strokes:
         if "*" in stripped_stroke:
             if "-" in stripped_stroke:
-                fixed_strokes.append(stripped_stroke.replace("-", "*"))
-                break
+                # The asterisk takes the hyphen's place at the left/right
+                # boundary: drop the marker asterisk first (or the stroke ends
+                # up with two), and keep going (a break would silently drop
+                # every stroke after this one).
+                fixed_strokes.append(stripped_stroke.replace("*", "").replace("-", "*"))
+                continue
 
             stripped_stroke = stripped_stroke.replace("*", "")
             # vowels_in_stroke=contains_vowel(stripped_stroke)
