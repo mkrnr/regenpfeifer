@@ -31,6 +31,22 @@ class TestWordEmphasizer(unittest.TestCase):
         self.run_test("missfallen", "inf", "missf[e|a]llen")
         self.run_test("Missfallen", "other", "M[e|i]ssfallen")
 
+    def test_stacked_never_emp_prefixes(self):
+        # Only the first never-emp prefix is unstressed; the stem after it must
+        # survive intact (beerdigen kept losing its "be" and emphasized "digen").
+        self.run_test("beerdigen", "inf", "be[e|e]rdigen")
+        self.run_test("vererben", "inf", "ver[e|e]rben")
+        self.run_test("beenden", "inf", "be[e|e]nden")
+
+    def test_first_diphtong_only(self):
+        # Two marked vowels in one unit never validate; only the first
+        # occurrence carries the stress.
+        self.run_test("aufbauen", "inf", "[e|au]fbauen")
+
+    def test_longest_usually_emp_prefix(self):
+        # "dar" must beat "da" so the stressed separable prefix stays whole.
+        self.run_test("daran", "in", "dar[e|a]n")
+
     def run_test(self, word, word_type, expected):
         self.assertEqual(expected, self.word_emphasizer.emphasize(word, word_type))
 
