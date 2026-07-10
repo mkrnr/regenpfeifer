@@ -18,7 +18,17 @@ class WordSyllableSplitter(object):
         """
         self.vowels = ["a", "e", "i", "o", "u", "ä", "ö", "ü"]
 
-        self.split_vowel_pairs = ["io", "eie", "eue"]
+        self.split_vowel_pairs = [
+            "io",
+            "eie",
+            "eue",
+            "ua",
+            "äi",
+            "ea",
+            "eo",
+            "ia",
+            "ue",
+        ]
         self.preventing_vowel_split_right = ["nen"]
 
         self.splitters = ["sst", "ier"]

@@ -51,9 +51,23 @@ class TestWordSyllableSplitter(unittest.TestCase):
         # self.run_test("gestanden", ["ge", "stan","den"])
         # self.run_test('gestellt', ['ge', 'stellt'])
         # self.run_test('andere', ['an', 'de', 're'])
-        # self.run_test('Januar', ['Ja', 'nu', 'ar'])
-        # self.run_test('Januare', ['Ja', 'nu', 'a', 're'])
         # self.run_test('bereits', ['be', 'reits'])
+
+    def test_hiatus_vowel_pairs(self):
+        # Adjacent vowels that are two syllables, not a diphthong: each pair
+        # in split_vowel_pairs becomes a syllable boundary, so every chunk
+        # keeps a single vowel nucleus and can form a stroke. (Januar was on
+        # the failing list above -- the boundary lands after the n, but every
+        # chunk is single-vowel, which is what generation needs.)
+        self.run_test("Januar", ["Jan", "u", "ar"])
+        self.run_test("europäisch", ["eu", "ro", "pä", "isch"])
+        self.run_test("beamte", ["be", "am", "te"])
+        self.run_test("theater", ["the", "a", "ter"])
+        self.run_test("aktuell", ["ak", "tu", "ell"])
+        self.run_test("material", ["ma", "ter", "i", "al"])
+        self.run_test("theorie", ["the", "o", "rie"])
+        # diphthongs and ie stay whole:
+        self.run_test("Familie", ["Fa", "mi", "lie"])
 
     def run_test(self, word, expected):
         self.assertEqual(expected, self.syllable_splitter.split(word))
