@@ -3,12 +3,17 @@ from collections import OrderedDict
 import collections
 from datetime import datetime
 import json
+import os
 import sys
 import time
 
 from regenpfeifer.stroke_generator import StrokeGenerator
 from regenpfeifer.word_emphasizer import WordEmphasizer
 from regenpfeifer.word_splitter import WordSplitter
+
+custom_translations_path = os.path.join(
+    os.path.dirname(__file__), "assets", "dictionaries", "custom_translations.json"
+)
 
 
 class DictionaryGenerator:
@@ -18,9 +23,9 @@ class DictionaryGenerator:
     def generate(self):
         dictionary = {}
 
-        with open("assets/dictionaries/custom_translations.json", "r") as f:
+        with open(custom_translations_path, "r") as f:
             custom_translations = json.load(f)
-        costom_translated_words = set(custom_translations.values())
+        custom_translated_words = set(custom_translations.values())
         for strokes in custom_translations:
             dictionary[strokes] = custom_translations[strokes]
 
@@ -28,7 +33,7 @@ class DictionaryGenerator:
         unmatched_count = 0
         duplicate_count = 0
         for word in dictionary_generator.words:
-            if word in costom_translated_words:
+            if word in custom_translated_words:
                 continue
             word_type = dictionary_generator.words[word].split(" ")[0].replace("\n", "")
             strokes_list = stroke_generator.generate(word, word_type)
