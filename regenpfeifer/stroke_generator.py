@@ -28,28 +28,26 @@ class StrokeGenerator(object):
         self.stroke_aggregator = StrokeAggregator()
         self.stroke_validator = StrokeValidator()
 
-        self.valid_strokes_dict = {}
-
-    def add_to_valid_strokes_dict(self, word, valid_strokes):
-        if word not in self.valid_strokes_dict:
-            self.valid_strokes_dict[word] = set()
-        self.valid_strokes_dict[word].add(valid_strokes)
+        # Memoize per-syllable matching keyed on the *emphasized* form, so a
+        # syllable's strokes depend only on the syllable itself, never on which
+        # words were processed before it. (The previous cache reused a word's
+        # validated strokes for a like-named syllable, which made the generated
+        # dictionary depend on word-list order and blocked parallelization.)
+        self.match_cache = {}
 
     def emphasize_syllables(self, syllables, word, word_type):
         emphasized_matched_syllables_list = []
         for syllable in syllables:
-            if syllable in self.valid_strokes_dict:
-                matched_syllables = self.valid_strokes_dict[syllable]
+            if syllable == word:
+                emphasized_syllable = self.word_emphasizer.emphasize(
+                    syllable, word_type
+                )
             else:
-                if syllable == word:
-                    emphasized_syllable = self.word_emphasizer.emphasize(
-                        syllable, word_type
-                    )
-                else:
-                    emphasized_syllable = self.word_emphasizer.emphasize(
-                        syllable, "other"
-                    )
+                emphasized_syllable = self.word_emphasizer.emphasize(syllable, "other")
+            matched_syllables = self.match_cache.get(emphasized_syllable)
+            if matched_syllables is None:
                 matched_syllables = self.word_pattern_matcher.match(emphasized_syllable)
+                self.match_cache[emphasized_syllable] = matched_syllables
 
             if len(emphasized_matched_syllables_list) == 0:
                 emphasized_matched_syllables_list = matched_syllables
@@ -95,7 +93,6 @@ class StrokeGenerator(object):
                 and self.stroke_validator.validate(matched_strokes)
             ):
                 valid_strokes_list.append(matched_strokes)
-                self.add_to_valid_strokes_dict(word, matched_strokes)
 
         stripped_strokes_list = []
         for valid_strokes in valid_strokes_list:
