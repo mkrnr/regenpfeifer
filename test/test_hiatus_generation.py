@@ -10,14 +10,17 @@ class TestHiatusGeneration:
         # Two adjacent vowels in separate syllables left the pair inside one
         # chunk (two nuclei -> no valid stroke), so none of these generated.
         for word, word_type, expected in [
-            ("Januar", "sg", "SKWRAPB/U/AR"),
+            ("Januar", "sg", "SKWRA/TPHU/AR"),
             ("europäisch", "adj", "OEU/RO/PAE/EURB"),
             ("gearbeitet", "ppart", "TKPWE/AR/PWAEU/TET"),
             ("aktuell", "adj", "ABG/TU/EL"),
-            ("Material", "sg", "PHA/TER/EU/AL"),
+            ("Material", "sg", "PHA/TE/REU/AL"),
             ("Situation", "sg", "SEU/TU/A/TEU/OPB"),
             ("Theater", "sg", "THE/A/TER"),
             ("Beamte", "sg", "PWE/APL/TE"),
+            # splitter keeps the leading vowel attached (ame/ri/ka), but the
+            # vowel-initial fallback recovers the proper a|me|ri|ka outline:
+            ("Amerika", "sg", "A/PHE/REU/KA"),
         ]:
             strokes = self.stroke_generator.generate(word, word_type)
             assert expected in strokes, f"{word}: {strokes}"
