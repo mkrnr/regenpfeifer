@@ -8,16 +8,18 @@ The latest Regenpfeifer dictionary is included in the [plover_regenpfeifer](http
 ## Usage
 
 The main entry point for creating the dictionary is [dictionary_generator.py](regenpfeifer/dictionary_generator.py).
-It takes as an input a file containing words and their grammatical form such as [wortformliste.csv](https://github.com/mkrnr/wortformliste/blob/master/wortformliste.csv) and needs a few more parameters for the output path, a path for a log file and two additional configuration parameters.
+It takes a file containing words and their grammatical form such as [wortformliste.csv](https://github.com/mkrnr/wortformliste/blob/master/wortformliste.csv) and generates the dictionary in parallel across all cores (~30 minutes on a 12-core machine; the output is deterministic and independent of worker count).
 To run the program, the dependencies listed in [requirements.txt](requirements.txt) need to be installed.
 
 From the repository root:
 
 ```sh
-python -m regenpfeifer.dictionary_generator wortformliste.csv out.json unmatched.log 0 0
+python -m regenpfeifer.dictionary_generator wortformliste.csv out.json
 ```
 
-(The last two arguments are `list_limit` and `word_limit`; `0` disables them.)
+Optional flags: `--log unmatched.log` writes unmatched words and outline
+collisions, `--workers N` limits the process count, `--limit N` generates only
+the first N words (see `--help`).
 
 
 
