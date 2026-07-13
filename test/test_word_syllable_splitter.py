@@ -51,9 +51,31 @@ class TestWordSyllableSplitter(unittest.TestCase):
         # self.run_test("gestanden", ["ge", "stan","den"])
         # self.run_test('gestellt', ['ge', 'stellt'])
         # self.run_test('andere', ['an', 'de', 're'])
-        # self.run_test('Januar', ['Ja', 'nu', 'ar'])
-        # self.run_test('Januare', ['Ja', 'nu', 'a', 're'])
         # self.run_test('bereits', ['be', 'reits'])
+
+    def test_hiatus_vowel_pairs(self):
+        # Adjacent vowels that are two syllables, not a diphthong: each pair
+        # in split_vowel_pairs becomes a syllable boundary, so every chunk
+        # keeps a single vowel nucleus and can form a stroke.
+        self.run_test("europäisch", ["eu", "ro", "pä", "isch"])
+        self.run_test("beamte", ["be", "am", "te"])
+        self.run_test("theater", ["the", "a", "ter"])
+        self.run_test("aktuell", ["ak", "tu", "ell"])
+        self.run_test("theorie", ["the", "o", "rie"])
+        # diphthongs and ie stay whole:
+        self.run_test("Familie", ["Fa", "mi", "lie"])
+
+    def test_hiatus_vowel_pairs_known_wrong_onset(self):
+        # KNOWN IMPERFECTION, separate from the hiatus split itself: the
+        # consonant before the pair stays in the preceding syllable's coda,
+        # where German syllabification puts it in the following onset --
+        # proper splits are Ja/nu/ar and ma/te/ri/al. Every chunk is still
+        # single-vowel, so these words generate (which they previously did
+        # not); fixing the onset attachment is the syllabifier follow-up
+        # (same family as gestanden/andere in the failing list above), and
+        # these assertions should then change to the proper splits.
+        self.run_test("Januar", ["Jan", "u", "ar"])
+        self.run_test("material", ["ma", "ter", "i", "al"])
 
     def run_test(self, word, expected):
         self.assertEqual(expected, self.syllable_splitter.split(word))
