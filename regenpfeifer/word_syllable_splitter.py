@@ -28,6 +28,9 @@ class WordSyllableSplitter(object):
             "eo",
             "ia",
             "ue",
+            "ae",
+            "äe",
+            "oe",
         ]
         self.preventing_vowel_split_right = ["nen"]
 
@@ -35,6 +38,27 @@ class WordSyllableSplitter(object):
         self.non_connectors = ["chl"]
         self.certain_connectors = ["sch", "ch", "ck", "schl", "chl"]
         self.left_connectors = ["er", "an"]
+        # left_connectors keep the consonant in the preceding syllable. That is
+        # right when er/an ends a prefix (er|innern, ver|ein, über|all,
+        # an|erkennen) but wrong word-internally, where German puts the
+        # consonant into the following onset (Ja|nu|ar, ma|te|ri|al, not
+        # Jan|u|ar, ma|ter|i|al). The rule therefore only fires when
+        # everything before the boundary is one of these prefixes.
+        self.left_connector_prefixes = [
+            "er",
+            "an",
+            "ver",
+            "her",
+            "über",
+            "ueber",
+            "unter",
+            "inter",
+            "hinter",
+            "wider",
+            "wieder",
+            "außer",
+            "ausser",
+        ]
         self.left_non_connectors = ["ana"]
         self.possible_connectors = [
             "ph",
@@ -137,7 +161,10 @@ class WordSyllableSplitter(object):
         elif v + z1 in self.left_non_connectors:
             self.add_split_position(i + 2, word, split_positions)
         elif v in self.left_connectors:
-            self.add_split_position(i + 1, word, split_positions)
+            if word[: i + 1] in self.left_connector_prefixes:
+                self.add_split_position(i + 1, word, split_positions)
+            else:
+                self.add_split_position(i, word, split_positions)
         elif v in self.possible_connectors:
             self.add_split_position(i - len(v) + 1, word, split_positions)
         else:

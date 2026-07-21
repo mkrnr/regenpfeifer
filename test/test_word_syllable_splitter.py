@@ -50,8 +50,8 @@ class TestWordSyllableSplitter(unittest.TestCase):
         # currently failing:
         # self.run_test("gestanden", ["ge", "stan","den"])
         # self.run_test('gestellt', ['ge', 'stellt'])
-        # self.run_test('andere', ['an', 'de', 're'])
         # self.run_test('bereits', ['be', 'reits'])
+        self.run_test("andere", ["an", "de", "re"])
 
     def test_hiatus_vowel_pairs(self):
         # Adjacent vowels that are two syllables, not a diphthong: each pair
@@ -65,17 +65,31 @@ class TestWordSyllableSplitter(unittest.TestCase):
         # diphthongs and ie stay whole:
         self.run_test("Familie", ["Fa", "mi", "lie"])
 
-    def test_hiatus_vowel_pairs_known_wrong_onset(self):
-        # KNOWN IMPERFECTION, separate from the hiatus split itself: the
-        # consonant before the pair stays in the preceding syllable's coda,
-        # where German syllabification puts it in the following onset --
-        # proper splits are Ja/nu/ar and ma/te/ri/al. Every chunk is still
-        # single-vowel, so these words generate (which they previously did
-        # not); fixing the onset attachment is the syllabifier follow-up
-        # (same family as gestanden/andere in the failing list above), and
-        # these assertions should then change to the proper splits.
-        self.run_test("Januar", ["Jan", "u", "ar"])
-        self.run_test("material", ["ma", "ter", "i", "al"])
+    def test_onset_attachment(self):
+        # er/an before a vowel keep the consonant left only when they end a
+        # real prefix; everywhere else the consonant onsets the next
+        # syllable, as German syllabification has it.
+        self.run_test("Januar", ["Ja", "nu", "ar"])
+        self.run_test("material", ["ma", "te", "ri", "al"])
+        # KNOWN IMPERFECTION: proper German is a|me|ri|ka, but
+        # add_split_position never splits after a word's first letter, so the
+        # leading vowel stays attached here. Generation still ends up right:
+        # the vowel-initial fallback peels the a and emits A/PHE/REU/KA.
+        self.run_test("amerika", ["ame", "ri", "ka"])
+        # prefix positions keep their boundary:
+        self.run_test("erinnern", ["er", "in", "nern"])
+        self.run_test("verein", ["ver", "ein"])
+        self.run_test("überall", ["über", "all"])
+        self.run_test("anerkennen", ["an", "er", "ken", "nen"])
+        self.run_test("heraus", ["her", "aus"])
+        self.run_test("unterarm", ["un", "ter", "arm"])
+
+    def test_hiatus_ae_oe_pairs(self):
+        # ae/äe/oe are hiatus too; the old wrong onset boundary was the only
+        # thing making these words writable (päer carried er as a coda).
+        self.run_test("israelisch", ["is", "ra", "e", "lisch"])
+        self.run_test("europäerin", ["eu", "ro", "pä", "e", "rin"])
+        self.run_test("autoerotik", ["au", "to", "e", "ro", "tik"])
 
     def run_test(self, word, expected):
         self.assertEqual(expected, self.syllable_splitter.split(word))
