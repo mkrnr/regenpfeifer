@@ -6,6 +6,8 @@ Based on Algorithm by Daniel Kirsch on https://www.wer-weiss-was.de/t/silbentren
 @author: mkoerner
 """
 
+from regenpfeifer import german
+
 
 class WordSyllableSplitter(object):
     """
@@ -16,7 +18,7 @@ class WordSyllableSplitter(object):
         """
         Constructor
         """
-        self.vowels = ["a", "e", "i", "o", "u", "ä", "ö", "ü"]
+        self.vowels = list(german.VOWELS)
 
         self.split_vowel_pairs = [
             "io",
@@ -44,21 +46,7 @@ class WordSyllableSplitter(object):
         # consonant into the following onset (Ja|nu|ar, ma|te|ri|al, not
         # Jan|u|ar, ma|ter|i|al). The rule therefore only fires when
         # everything before the boundary is one of these prefixes.
-        self.left_connector_prefixes = [
-            "er",
-            "an",
-            "ver",
-            "her",
-            "über",
-            "ueber",
-            "unter",
-            "inter",
-            "hinter",
-            "wider",
-            "wieder",
-            "außer",
-            "ausser",
-        ]
+        self.left_connector_prefixes = list(german.LEFT_CONNECTOR_PREFIXES)
         self.left_non_connectors = ["ana"]
         self.possible_connectors = [
             "ph",

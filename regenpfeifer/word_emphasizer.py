@@ -1,21 +1,17 @@
 import re
 
+from regenpfeifer import german
+
 
 class WordEmphasizer:
     def __init__(self):
-        self.never_emp_prefixes = []
-        self.never_emp_prefixes.append("be")
-        self.never_emp_prefixes.append("ent")
-        self.never_emp_prefixes.append("er")
-        self.never_emp_prefixes.append("ver")
-        self.never_emp_prefixes.append("zer")
+        self.never_emp_prefixes = list(german.NEVER_EMPHASIZED_PREFIXES)
 
         self.never_emp_ppart_prefixes = list(self.never_emp_prefixes)
-        self.never_emp_ppart_prefixes.append("ge")
+        self.never_emp_ppart_prefixes.append(german.PAST_PARTICIPLE_PREFIX)
 
         self.never_emp_verb_prefixes = list(self.never_emp_prefixes)
-        self.never_emp_verb_prefixes.append("miss")
-        self.never_emp_verb_prefixes.append("wider")
+        self.never_emp_verb_prefixes.extend(german.NEVER_EMPHASIZED_VERB_PREFIXES)
 
         self.verb_forms = set()
         # for 1sg, 1pl, 1ppl...
@@ -25,50 +21,13 @@ class WordEmphasizer:
         self.verb_forms.add("inf")
         self.verb_forms.add("part")
 
-        self.diphtongs = []
-        self.diphtongs.append("au")
-        self.diphtongs.append("äu")
-        self.diphtongs.append("eu")
-        self.diphtongs.append("ei")
-        self.diphtongs.append("ey")
-        self.diphtongs.append("ai")
-        self.diphtongs.append("ay")
+        self.diphtongs = list(german.DIPHTHONGS)
 
-        self.usually_emp_prefixes = []
+        self.usually_emp_prefixes = list(german.USUALLY_EMPHASIZED_PREFIXES)
 
-        self.usually_emp_prefixes.append("dar")
-        self.usually_emp_prefixes.append("da")
-        self.usually_emp_prefixes.append("her")
-        self.usually_emp_prefixes.append("hin")
-        self.usually_emp_prefixes.append("vor")
-        self.usually_emp_prefixes.append("zu")
+        self.vowels = set(german.VOWELS)
 
-        self.vowels = set()
-        self.vowels.add("a")
-        self.vowels.add("e")
-        self.vowels.add("i")
-        self.vowels.add("o")
-        self.vowels.add("u")
-        self.vowels.add("ä")
-        self.vowels.add("ö")
-        self.vowels.add("ü")
-
-        self.emp_prefixes = []
-        self.emp_prefixes.append("ab")
-        self.emp_prefixes.append("an")
-        self.emp_prefixes.append("auf")
-        self.emp_prefixes.append("aus")
-        self.emp_prefixes.append("bei")
-        self.emp_prefixes.append("ein")
-        self.emp_prefixes.append("empor")
-        self.emp_prefixes.append("fort")
-        self.emp_prefixes.append("los")
-        self.emp_prefixes.append("mit")
-        self.emp_prefixes.append("nach")
-        self.emp_prefixes.append("nieder")
-        self.emp_prefixes.append("weg")
-        self.emp_prefixes.append("weiter")
-        self.emp_prefixes.append("wieder")
+        self.emp_prefixes = list(german.EMPHASIZED_PREFIXES)
 
     def emp_vowel(self, word):
         for i in range(len(word)):
