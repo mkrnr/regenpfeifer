@@ -84,6 +84,17 @@ class TestWordSyllableSplitter(unittest.TestCase):
         self.run_test("heraus", ["her", "aus"])
         self.run_test("unterarm", ["un", "ter", "arm"])
 
+    def test_prefix_split_falls_back(self):
+        # unter/hinter are prefixes, but before a single trailing letter they
+        # are an inflection, not a compound. The position guard rejects that
+        # boundary, so the split must fall back rather than be lost entirely.
+        self.run_test("hintere", ["hin", "te", "re"])
+        self.run_test("untere", ["un", "te", "re"])
+        self.run_test("weitere", ["wei", "te", "re"])
+        # a real prefix boundary is unaffected:
+        self.run_test("hinterer", ["hin", "ter", "er"])
+        self.run_test("verein", ["ver", "ein"])
+
     def test_hiatus_ae_oe_pairs(self):
         # ae/äe/oe are hiatus too; the old wrong onset boundary was the only
         # thing making these words writable (päer carried er as a coda).

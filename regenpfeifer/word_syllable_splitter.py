@@ -6,8 +6,6 @@ Based on Algorithm by Daniel Kirsch on https://www.wer-weiss-was.de/t/silbentren
 @author: mkoerner
 """
 
-from regenpfeifer import german
-
 
 class WordSyllableSplitter(object):
     """
@@ -18,7 +16,7 @@ class WordSyllableSplitter(object):
         """
         Constructor
         """
-        self.vowels = list(german.VOWELS)
+        self.vowels = ["a", "e", "i", "o", "u", "ä", "ö", "ü"]
 
         self.split_vowel_pairs = [
             "io",
@@ -46,7 +44,21 @@ class WordSyllableSplitter(object):
         # consonant into the following onset (Ja|nu|ar, ma|te|ri|al, not
         # Jan|u|ar, ma|ter|i|al). The rule therefore only fires when
         # everything before the boundary is one of these prefixes.
-        self.left_connector_prefixes = list(german.LEFT_CONNECTOR_PREFIXES)
+        self.left_connector_prefixes = [
+            "er",
+            "an",
+            "ver",
+            "her",
+            "über",
+            "ueber",
+            "unter",
+            "inter",
+            "hinter",
+            "wider",
+            "wieder",
+            "außer",
+            "ausser",
+        ]
         self.left_non_connectors = ["ana"]
         self.possible_connectors = [
             "ph",
@@ -150,7 +162,12 @@ class WordSyllableSplitter(object):
             self.add_split_position(i + 2, word, split_positions)
         elif v in self.left_connectors:
             if word[: i + 1] in self.left_connector_prefixes:
-                self.add_split_position(i + 1, word, split_positions)
+                # A prefix boundary one character from the end is an inflection
+                # rather than a compound (hinter|e), and the position guard
+                # rejects it -- fall back so the syllable split is not lost
+                # entirely (hin/te/re, not hin/tere).
+                if not self.add_split_position(i + 1, word, split_positions):
+                    self.add_split_position(i, word, split_positions)
             else:
                 self.add_split_position(i, word, split_positions)
         elif v in self.possible_connectors:
@@ -181,6 +198,8 @@ class WordSyllableSplitter(object):
     def add_split_position(self, split_position, word, split_positions):
         if 1 < split_position < len(word) - 1:
             split_positions.append(split_position)
+            return True
+        return False
 
     def split(self, word):
         split_positions = self.compute_for_word(word)
