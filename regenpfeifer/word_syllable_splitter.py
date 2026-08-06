@@ -150,7 +150,12 @@ class WordSyllableSplitter(object):
             self.add_split_position(i + 2, word, split_positions)
         elif v in self.left_connectors:
             if word[: i + 1] in self.left_connector_prefixes:
-                self.add_split_position(i + 1, word, split_positions)
+                # A prefix boundary one character from the end is an inflection
+                # rather than a compound (hinter|e), and the position guard
+                # rejects it -- fall back so the syllable split is not lost
+                # entirely (hin/te/re, not hin/tere).
+                if not self.add_split_position(i + 1, word, split_positions):
+                    self.add_split_position(i, word, split_positions)
             else:
                 self.add_split_position(i, word, split_positions)
         elif v in self.possible_connectors:
@@ -181,6 +186,8 @@ class WordSyllableSplitter(object):
     def add_split_position(self, split_position, word, split_positions):
         if 1 < split_position < len(word) - 1:
             split_positions.append(split_position)
+            return True
+        return False
 
     def split(self, word):
         split_positions = self.compute_for_word(word)
