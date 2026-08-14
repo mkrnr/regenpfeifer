@@ -35,6 +35,18 @@ class TestCodaClusterPatterns:
         assert "HAEUTS" in self.stroke_generator.generate("heißt", "3sg")
         assert "TKPWE/TPHAOEUTS" in self.stroke_generator.generate("genießt", "3sg")
 
+    def test_rnst_cluster(self):
+        # rnst extends the C+st family: the s (F key) leads, then rn's keys,
+        # then -T -- mirroring nst [-FPBT] with the r prepended. The 2sg present
+        # forms of -rn verbs (lernst, warnst, ...) were unmatched before.
+        for word, expected in [
+            ("lernst", "HREFRPBT"),
+            ("warnst", "WAFRPBT"),
+            ("entkernst", "EPBT/KEFRPBT"),
+        ]:
+            strokes = self.stroke_generator.generate(word, "2sg")
+            assert expected in strokes, f"{word}: {strokes}"
+
     def test_double_consonant_collapse(self):
         # rr joins the ff/ll/mm/nn/pp/ss/tt collapse set -- German rr is
         # intra-morphemic (Herr, irr, starr, sperr, herrschen), so the collapse
